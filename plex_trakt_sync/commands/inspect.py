@@ -4,13 +4,13 @@ from plex_trakt_sync.version import git_version_info
 
 
 @click.command()
-@click.argument('input')
+@click.argument("input")
 def inspect(input):
     """
     Inspect details of an object
     """
 
-    git_version = git_version_info() or 'Unknown version'
+    git_version = git_version_info() or "Unknown version"
     print(f"PlexTraktSync inspect [{git_version}]")
 
     plex = factory.plex_api()

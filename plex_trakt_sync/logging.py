@@ -7,7 +7,6 @@ from .path import log_file
 
 
 class TqdmLoggingHandler(logging.StreamHandler):
-
     def emit(self, record):
         try:
             msg = self.format(record)
@@ -16,15 +15,14 @@ class TqdmLoggingHandler(logging.StreamHandler):
         except (KeyboardInterrupt, SystemExit):
             raise
         except:
-            self.handleError(record)  
-
+            self.handleError(record)
 
 
 def initialize():
     CONFIG = factory.config()
     # global log level for all messages
-    log_level = logging.DEBUG if CONFIG['log_debug_messages'] else logging.INFO
-    log_format = '%(asctime)s %(levelname)s:%(message)s'
+    log_level = logging.DEBUG if CONFIG["log_debug_messages"] else logging.INFO
+    log_format = "%(asctime)s %(levelname)s:%(message)s"
 
     # messages with info and above are printed to stdout
     console_handler = TqdmLoggingHandler(sys.stdout)
@@ -32,9 +30,11 @@ def initialize():
     console_handler.setLevel(logging.INFO)
 
     # file handler can log down to debug messages
-    mode = "a" if CONFIG['logging']['append'] else "w"
-    file_handler = logging.FileHandler(log_file, mode, 'utf-8')
-    file_handler.setFormatter(logging.Formatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s"))
+    mode = "a" if CONFIG["logging"]["append"] else "w"
+    file_handler = logging.FileHandler(log_file, mode, "utf-8")
+    file_handler.setFormatter(
+        logging.Formatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s")
+    )
     file_handler.setLevel(logging.DEBUG)
 
     handlers = [
@@ -46,9 +46,10 @@ def initialize():
     # Set debug for other components as well
     if log_level == logging.DEBUG:
         from plexapi import log as logger
+
         logger.setLevel(logging.DEBUG)
         logger.addHandler(file_handler)
 
 
 initialize()
-logger = logging.getLogger('PlexTraktSync')
+logger = logging.getLogger("PlexTraktSync")

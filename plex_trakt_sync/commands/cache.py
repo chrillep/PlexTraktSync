@@ -38,25 +38,22 @@ def limit_iterator(items, limit: int):
     "--sort",
     type=click.Choice(["size", "date", "url"], case_sensitive=False),
     default="size",
-    show_default=True, help="Sort mode"
+    show_default=True,
+    help="Sort mode",
 )
 @click.option(
     "--limit",
     type=int,
     default=20,
-    show_default=True, help="Limit entries to be printed"
+    show_default=True,
+    help="Limit entries to be printed",
 )
-@click.option(
-    "--reverse",
-    is_flag=True,
-    default=False,
-    help="Sort reverse"
-)
+@click.option("--reverse", is_flag=True, default=False, help="Sort reverse")
 def cache(sort: str, limit: int, reverse: bool):
     """
     Manage and analyze Requests Cache.
     """
-    session = CachedSession(cache_name=trakt_cache, backend='sqlite')
+    session = CachedSession(cache_name=trakt_cache, backend="sqlite")
     click.echo(f"Cache status:\n{session.cache}\n")
 
     click.echo(f"URLs:")
