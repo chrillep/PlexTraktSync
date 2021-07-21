@@ -22,7 +22,7 @@ class WebSocketListener:
     def listen(self):
         def handler(data):
             self.logger.debug(data)
-            event_type = data['type']
+            event_type = data["type"]
             if event_type not in self.event_handlers:
                 return
 

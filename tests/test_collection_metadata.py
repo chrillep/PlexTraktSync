@@ -16,11 +16,11 @@ testdata = [
             ],
         ),
         {
-            'collected_at': '1998-12-31:T22:00:00.000Z',
-            'media_type': 'digital',
-            'resolution': 'hd_720p',
-            'audio_channels': '2.0',
-        }
+            "collected_at": "1998-12-31:T22:00:00.000Z",
+            "media_type": "digital",
+            "resolution": "hd_720p",
+            "audio_channels": "2.0",
+        },
     ),
     (
         make(
@@ -43,16 +43,16 @@ testdata = [
                                 displayTitle="English (EAC3 5.1)",
                             ),
                         ]
-                    )
+                    ),
                 ),
             ],
         ),
         {
-            'collected_at': '1998-12-31:T22:00:00.000Z',
-            'media_type': 'digital',
-            'resolution': 'hd_720p',
-            'audio_channels': '2.0',
-        }
+            "collected_at": "1998-12-31:T22:00:00.000Z",
+            "media_type": "digital",
+            "resolution": "hd_720p",
+            "audio_channels": "2.0",
+        },
     ),
 ]
 

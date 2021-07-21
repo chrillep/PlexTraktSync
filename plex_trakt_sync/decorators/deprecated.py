@@ -4,7 +4,6 @@ except ImportError as e:
     import warnings
     from functools import wraps
 
-
     def deprecated(reason=""):
         def decorator(fn):
             @wraps(fn)
