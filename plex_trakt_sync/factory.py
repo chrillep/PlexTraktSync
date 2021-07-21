@@ -38,6 +38,7 @@ class Factory:
     @memoize
     def session(self):
         from requests_cache import CachedSession
+
         from plex_trakt_sync.path import trakt_cache
 
         session = CachedSession(trakt_cache)
@@ -47,6 +48,7 @@ class Factory:
     @memoize
     def requests_cache(self):
         import requests_cache
+
         from plex_trakt_sync.path import trakt_cache
 
         requests_cache.install_cache(trakt_cache)

@@ -17,7 +17,8 @@ def unmatched():
     walker = Walker(plex, mf, progressbar=click.progressbar)
 
     if not walker.is_valid():
-        click.echo("Nothing to scan, this is likely due conflicting options given.")
+        click.echo(
+            "Nothing to scan, this is likely due conflicting options given.")
         return
 
     walker.walk_details(print=click.echo)
