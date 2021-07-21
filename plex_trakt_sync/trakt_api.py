@@ -71,7 +71,7 @@ class TraktApi:
     @rate_limit()
     def me(self):
         try:
-            return trakt.users.User('me')
+            return trakt.users.User("me")
         except (OAuthException, ForbiddenException) as e:
             logger.fatal("Trakt authentication error: {}".format(str(e)))
             raise e
@@ -82,7 +82,7 @@ class TraktApi:
     @rate_limit()
     def liked_lists(self):
         CONFIG = factory.config()
-        if not CONFIG['sync']['liked_lists']:
+        if not CONFIG["sync"]["liked_lists"]:
             return []
         return pytrakt_extensions.get_liked_lists()
 
@@ -91,9 +91,7 @@ class TraktApi:
     @nocache
     @rate_limit()
     def watched_movies(self):
-        return set(
-            map(lambda m: m.trakt, self.me.watched_movies)
-        )
+        return set(map(lambda m: m.trakt, self.me.watched_movies))
 
     @property
     @memoize
@@ -120,9 +118,7 @@ class TraktApi:
     @property
     @memoize
     def movie_collection_set(self):
-        return set(
-            map(lambda m: m.trakt, self.movie_collection)
-        )
+        return set(map(lambda m: m.trakt, self.movie_collection))
 
     @property
     @memoize
@@ -137,7 +133,7 @@ class TraktApi:
     @rate_limit()
     def watchlist_movies(self):
         CONFIG = factory.config()
-        if not CONFIG['sync']['watchlist']:
+        if not CONFIG["sync"]["watchlist"]:
             return []
 
         return self.me.watchlist_movies
@@ -147,14 +143,14 @@ class TraktApi:
     @nocache
     @rate_limit()
     def movie_ratings(self):
-        return self.me.get_ratings(media_type='movies')
+        return self.me.get_ratings(media_type="movies")
 
     @property
     @memoize
     def ratings(self):
         ratings = {}
         for r in self.movie_ratings:
-            ratings[r['movie']['ids']['slug']] = r['rating']
+            ratings[r["movie"]["ids"]["slug"]] = r["rating"]
 
         return ratings
 
@@ -189,10 +185,7 @@ class TraktApi:
                 **pm.to_json(),
             )
         elif m.media_type == "episodes":
-            item = dict(
-                **m.ids,
-                **pm.to_json()
-            )
+            item = dict(**m.ids, **pm.to_json())
         else:
             raise ValueError(f"Unsupported media type: {m.media_type}")
 
@@ -216,7 +209,9 @@ class TraktApi:
     @memoize
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
-            ts = self.search_by_id(guid.show_id, id_type=guid.provider, media_type="show")
+            ts = self.search_by_id(
+                guid.show_id, id_type=guid.provider, media_type="show"
+            )
             return self.find_episode_guid(ts, guid)
 
         return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
@@ -235,7 +230,9 @@ class TraktApi:
             logger.debug("tvdb does not support movie provider")
             return None
 
-        search = trakt.sync.search_by_id(media_id, id_type=id_type, media_type=media_type)
+        search = trakt.sync.search_by_id(
+            media_id, id_type=id_type, media_type=media_type
+        )
         # look for the first wanted type in the results
         # NOTE: this is not needed, kept around for caution
         for m in search:

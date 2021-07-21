@@ -10,7 +10,9 @@ class Walker:
     Class dealing with finding and walking library, movies/shows, episodes
     """
 
-    def __init__(self, plex: PlexApi, mf: MediaFactory, progressbar=None, movies=True, shows=True):
+    def __init__(
+        self, plex: PlexApi, mf: MediaFactory, progressbar=None, movies=True, shows=True
+    ):
         self._progressbar = progressbar
         self.plex = plex
         self.mf = mf
@@ -98,7 +100,11 @@ class Walker:
 
         for section in sections:
             with measure_time(f"{section.title} processed"):
-                it = self.progressbar(section.items(), total=len(section), desc=f"Processing {section.title}")
+                it = self.progressbar(
+                    section.items(),
+                    total=len(section),
+                    desc=f"Processing {section.title}",
+                )
                 yield from it
 
     def media_from_titles(self, libtype: str, titles: List[str]):
