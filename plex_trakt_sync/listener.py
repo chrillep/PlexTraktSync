@@ -1,4 +1,5 @@
 from time import sleep
+
 from plexapi.server import PlexServer
 
 from plex_trakt_sync.logging import logging
@@ -22,7 +23,7 @@ class WebSocketListener:
     def listen(self):
         def handler(data):
             self.logger.debug(data)
-            event_type = data['type']
+            event_type = data["type"]
             if event_type not in self.event_handlers:
                 return
 
@@ -34,5 +35,6 @@ class WebSocketListener:
             while notifier.is_alive():
                 sleep(self.interval)
 
-            self.logger.debug(f"Listener finished. Restarting in {self.interval}")
+            self.logger.debug(
+                f"Listener finished. Restarting in {self.interval}")
             sleep(self.interval)

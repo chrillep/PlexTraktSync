@@ -2,13 +2,13 @@ import click
 from tqdm import tqdm
 
 from plex_trakt_sync.commands.login import ensure_login
+from plex_trakt_sync.decorators.measure_time import measure_time
 from plex_trakt_sync.factory import factory
+from plex_trakt_sync.logging import logger
 from plex_trakt_sync.media import Media
 from plex_trakt_sync.plex_api import PlexApi
-from plex_trakt_sync.decorators.measure_time import measure_time
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
-from plex_trakt_sync.logging import logger
 from plex_trakt_sync.version import git_version_info
 from plex_trakt_sync.walker import Walker
 
@@ -16,7 +16,7 @@ CONFIG = factory.config()
 
 
 def sync_collection(m: Media):
-    if not CONFIG['sync']['collection']:
+    if not CONFIG["sync"]["collection"]:
         return
 
     if m.is_collected:
@@ -27,7 +27,7 @@ def sync_collection(m: Media):
 
 
 def sync_ratings(m: Media):
-    if not CONFIG['sync']['ratings']:
+    if not CONFIG["sync"]["ratings"]:
         return
 
     if m.plex_rating is m.trakt_rating:
@@ -43,7 +43,7 @@ def sync_ratings(m: Media):
 
 
 def sync_watched(m: Media):
-    if not CONFIG['sync']['watched_status']:
+    if not CONFIG["sync"]["watched_status"]:
         return
 
     if m.watched_on_plex is m.watched_on_trakt:
@@ -69,14 +69,19 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi):
         trakt_liked_lists = trakt.liked_lists
 
     if trakt_watchlist_movies:
-        listutil.addList(None, "Trakt Watchlist", trakt_list=trakt_watchlist_movies)
+        listutil.addList(None,
+                         "Trakt Watchlist",
+                         trakt_list=trakt_watchlist_movies)
 
     for lst in trakt_liked_lists:
-        listutil.addList(lst['username'], lst['listname'])
+        listutil.addList(lst["username"], lst["listname"])
 
-    click.echo(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
+    click.echo(
+        f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
     # Load sections, this will attempt to connect to Plex
-    click.echo(f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}")
+    click.echo(
+        f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}"
+    )
 
     for movie in walker.find_movies():
         sync_collection(movie)
@@ -99,33 +104,35 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi):
 
 
 @click.command()
+@click.option("--library", help="Specify Library to use")
+@click.option("--show",
+              "show",
+              type=str,
+              show_default=True,
+              help="Sync specific show only")
+@click.option("--movie",
+              "movie",
+              type=str,
+              show_default=True,
+              help="Sync specific movie only")
 @click.option(
-    "--library",
-    help="Specify Library to use"
-)
-@click.option(
-    "--show", "show",
-    type=str,
-    show_default=True, help="Sync specific show only"
-)
-@click.option(
-    "--movie", "movie",
-    type=str,
-    show_default=True, help="Sync specific movie only"
-)
-@click.option(
-    "--sync", "sync_option",
+    "--sync",
+    "sync_option",
     type=click.Choice(["all", "movies", "tv"], case_sensitive=False),
     default="all",
-    show_default=True, help="Specify what to sync"
+    show_default=True,
+    help="Specify what to sync",
 )
 @click.option(
-    "--batch-size", "batch_size",
+    "--batch-size",
+    "batch_size",
     type=int,
-    default=1, show_default=True,
-    help="Batch size for collection submit queue"
+    default=1,
+    show_default=True,
+    help="Batch size for collection submit queue",
 )
-def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int):
+def sync(sync_option: str, library: str, show: str, movie: str,
+         batch_size: int):
     """
     Perform sync between Plex and Trakt
     """
@@ -135,7 +142,9 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
         logger.info(f"PlexTraktSync [{git_version}]")
 
     ensure_login()
-    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
+    logger.info(
+        f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}"
+    )
 
     movies = sync_option in ["all", "movies"]
     tv = sync_option in ["all", "tv"]
@@ -156,7 +165,8 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
         logger.info(f"Syncing Movie: {movie}")
 
     if not w.is_valid():
-        click.echo("Nothing to sync, this is likely due conflicting options given.")
+        click.echo(
+            "Nothing to sync, this is likely due conflicting options given.")
         return
 
     w.walk_details(print=tqdm.write)

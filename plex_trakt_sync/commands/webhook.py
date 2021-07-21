@@ -48,7 +48,9 @@ class WebhookHandler:
 class HttpRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.set_response()
-        self.wfile.write(f"PlexTraktSync Webhook for Tautulli. See {TAUTULLI_WEBHOOK_URL}".encode('utf-8'))
+        self.wfile.write(
+            f"PlexTraktSync Webhook for Tautulli. See {TAUTULLI_WEBHOOK_URL}".
+            encode("utf-8"))
 
     def do_PUT(self):
         payload = self.get_payload()
@@ -61,10 +63,10 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
             return self.error(f"Error handling request: {e}")
 
         self.set_response()
-        self.wfile.write('{"status": "ok"}'.encode('utf-8'))
+        self.wfile.write('{"status": "ok"}'.encode("utf-8"))
 
     def get_payload(self):
-        content_length = int(self.headers['Content-Length'] or 0)
+        content_length = int(self.headers["Content-Length"] or 0)
         if not content_length:
             return self.error(f"No Content-Length header")
 
@@ -91,14 +93,22 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
 
 @click.command()
-@click.option("--bind", help="Address to listen on", show_default=True, default="localhost")
-@click.option("--port", help="TCP port to listen on", show_default=True, default=7707)
+@click.option("--bind",
+              help="Address to listen on",
+              show_default=True,
+              default="localhost")
+@click.option("--port",
+              help="TCP port to listen on",
+              show_default=True,
+              default=7707)
 def webhook(bind: str, port: int):
     """
     Listen for WebHook data from HTTP
     """
 
-    with socketserver.TCPServer((bind, port), HttpRequestHandler, bind_and_activate=False) as httpd:
+    with socketserver.TCPServer((bind, port),
+                                HttpRequestHandler,
+                                bind_and_activate=False) as httpd:
         plex = factory.plex_api()
         mf = factory.media_factory()
 
