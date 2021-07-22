@@ -36,4 +36,4 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Run Sync
       run: |
-        ./plex_trakt_sync.sh sync 
+        ./plex_trakt_sync.sh
