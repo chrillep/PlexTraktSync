@@ -34,10 +34,11 @@ jobs:
     - name: Test with pytest
       run: |
         coverage run -m pytest
+        coverage xml --include="plex_trakt_sync/*"
 
     - name: Upload coverage to CodeClimate
-      uses: paambaati/codeclimate-action@v2.2.4
+      uses: paambaati/codeclimate-action@v2.7.5
       env:
         CC_TEST_REPORTER_ID: 573e1f255d4847ef905a15fa35b3aca0e82ff0aedbe592b8729c9500eee8cab5
       with:
-        coverageCommand: coverage xml --include="plex_trakt_sync/*"
+        coverageCommand: coverage report -m
