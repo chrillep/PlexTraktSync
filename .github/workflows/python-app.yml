@@ -36,7 +36,7 @@ jobs:
         coverage run -m pytest
 
     - name: Upload coverage to CodeClimate
-    - uses: paambaati/codeclimate-action@v2.2.4
+      uses: paambaati/codeclimate-action@v2.2.4
       env:
         CC_TEST_REPORTER_ID: 573e1f255d4847ef905a15fa35b3aca0e82ff0aedbe592b8729c9500eee8cab5
       with:
