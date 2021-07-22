@@ -42,3 +42,20 @@ jobs:
         CC_TEST_REPORTER_ID: 573e1f255d4847ef905a15fa35b3aca0e82ff0aedbe592b8729c9500eee8cab5
       with:
         coverageCommand: coverage report -m
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        fail_ci_if_error: true
+
+    - name: Report test coverage to DeepSource
+      uses: deepsourcelabs/test-coverage-action@master
+      with:
+        key: python
+        coverage-file: coverage.xml
+        dsn: ${{ secrets.DEEPSOURCE_DSN }}
