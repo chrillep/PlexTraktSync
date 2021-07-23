@@ -44,15 +44,15 @@ jobs:
         PLEX_USERNAME=${{ secrets.PLEX_USERNAME }}
         TRAKT_USERNAME=${{ secrets.TRAKT_USERNAME }}" > .env
 
-    - name: Setup .pytrakt.json
+    - name: Setup .env
       run: |
-        echo "{
-                "CLIENT_ID": "${{ secrets.CLIENT_ID }}",
-                "CLIENT_SECRET": "${{ secrets.CLIENT_SECRET }}",
-                "OAUTH_TOKEN": "${{ secrets.OAUTH_TOKEN }}",
-                "OAUTH_REFRESH": "${{ secrets.OAUTH_REFRESH }}",
-                "OAUTH_EXPIRES_AT": ${{ secrets.OAUTH_EXPIRES_AT }}
-              }" > .pytrakt.json
+        echo '{
+                "CLIENT_ID": "6004e0c4d4c818de153f9a38982b89f3085a9236723415a4a2b8bf29032ef5c8",
+                "CLIENT_SECRET": "fed222bf5cc8a9279066b55341534936be82fa4e40b0bf6959bbd2ad5c2f0805",
+                "OAUTH_TOKEN": "383ad22aab02ce24d0210668b6127649983574f9c8e4bce251464e56a4e21614",
+                "OAUTH_REFRESH": "7c355c5de8ffc96cefa9fe22a797a6f4bd0a19854428412bc3da132d6b0fe41f",
+                "OAUTH_EXPIRES_AT": 1634675383
+              }' > .pytrakt.json
 
     - name: Run Sync
       run: |
