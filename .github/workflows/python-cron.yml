@@ -43,8 +43,7 @@ jobs:
         PLEX_TOKEN=${{ secrets.PLEX_TOKEN }}
         PLEX_USERNAME=${{ secrets.PLEX_USERNAME }}
         TRAKT_USERNAME=${{ secrets.TRAKT_USERNAME }}" > .env
-        cat .env
 
     - name: Run Sync
       run: |
-        ./plex_trakt_sync.sh plex-login --username ${{ secrets.PLEX_USERNAME }} --password ${{ secrets.PLEX_PASSWORD }}
+        cat .env
