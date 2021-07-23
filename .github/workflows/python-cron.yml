@@ -35,7 +35,7 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Setup settings from github secrets
+    - name: Setup .env
       run: |
         echo "# This is .env file for PlexTraktSync
         PLEX_BASEURL=${{ secrets.PLEX_BASEURL }}
@@ -43,6 +43,16 @@ jobs:
         PLEX_TOKEN=${{ secrets.PLEX_TOKEN }}
         PLEX_USERNAME=${{ secrets.PLEX_USERNAME }}
         TRAKT_USERNAME=${{ secrets.TRAKT_USERNAME }}" > .env
+
+    - name: Setup .pytrakt.json
+      run: |
+        echo "{
+                "CLIENT_ID": "${{ secrets.CLIENT_ID }}",
+                "CLIENT_SECRET": "${{ secrets.CLIENT_SECRET }}",
+                "OAUTH_TOKEN": "${{ secrets.OAUTH_TOKEN }}",
+                "OAUTH_REFRESH": "${{ secrets.OAUTH_REFRESH }}",
+                "OAUTH_EXPIRES_AT": ${{ secrets.OAUTH_EXPIRES_AT }}
+              }" > .pytrakt.json
 
     - name: Run Sync
       run: |
