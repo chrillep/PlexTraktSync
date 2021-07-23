@@ -46,4 +46,4 @@ jobs:
 
     - name: Run Sync
       run: |
-        cat .env
+        ./plex_trakt_sync.sh
