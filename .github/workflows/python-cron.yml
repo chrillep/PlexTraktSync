@@ -46,13 +46,13 @@ jobs:
 
     - name: Setup .pytrakt.json
       run: |
-        echo "{
+        echo '{
                 "CLIENT_ID": "${{ secrets.CLIENT_ID }}",
                 "CLIENT_SECRET": "${{ secrets.CLIENT_SECRET }}",
                 "OAUTH_TOKEN": "${{ secrets.OAUTH_TOKEN }}",
                 "OAUTH_REFRESH": "${{ secrets.OAUTH_REFRESH }}",
                 "OAUTH_EXPIRES_AT": ${{ secrets.OAUTH_EXPIRES_AT }}
-              }" > .pytrakt.json
+              }' > .pytrakt.json
 
     - name: Run Sync
       run: |
