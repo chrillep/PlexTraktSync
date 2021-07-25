@@ -51,7 +51,6 @@ jobs:
 
     - name: Lint with flake8
       run: |
-        . venv/bin/activate
         # stop the build if there are Python syntax errors or undefined names
         flake8 plexapi --count --select=E9,F63,F7,F82 --show-source --statistics
         # The GitHub editor is 127 chars wide
@@ -153,7 +152,6 @@ jobs:
 
     - name: Bootstrap ${{ matrix.plex }} Plex server
       run: |
-        . venv/bin/activate
         python \
           -u tools/plex-bootstraptest.py \
           --destination plex \
@@ -166,7 +164,6 @@ jobs:
       env:
         TEST_ACCOUNT_ONCE: ${{ matrix.plex == 'unclaimed' }}
       run: |
-        . venv/bin/activate
         pytest \
           -rxXs \
           --ignore=tests/test_sync.py \
@@ -178,7 +175,6 @@ jobs:
     - name: Sync tests with ${{ matrix.plex }} server
       if: matrix.plex == 'claimed'
       run: |
-        . venv/bin/activate
         pytest \
           -rxXs \
           --tb=native \
@@ -190,7 +186,6 @@ jobs:
     - name: Unlink PMS from MyPlex account
       if: matrix.plex == 'claimed' && always()
       run: |
-        . venv/bin/activate
         python -u tools/plex-teardowntest.py
 
     - name: Upload coverage artifact
@@ -248,7 +243,6 @@ jobs:
 
     - name: Combine ${{ matrix.plex }} coverage results
       run: |
-        . venv/bin/activate
         coverage combine coverage-${{ matrix.plex }}*/.coverage*
         coverage report --fail-under=50
         coverage xml
