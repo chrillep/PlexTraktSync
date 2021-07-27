@@ -71,10 +71,10 @@ jobs:
       matrix:
         python-version: [3.x]
         plex: ['unclaimed', 'claimed']
-        is-master:
-          - ${{ github.ref == 'refs/heads/master' }}
+        is-main:
+          - ${{ github.ref == 'refs/heads/main' }}
         exclude:
-          - is-master: false
+          - is-main: false
             plex: claimed
     steps:
     - name: Check out code from Github
@@ -96,7 +96,7 @@ jobs:
         key: >-
           ${{ env.CACHE_VERSION }}-${{ runner.os }}-pipenv-${{
           steps.python.outputs.python-version }}-${{
-          hashFiles('requirements_dev.txt') }}
+          hashFiles('**/Pipfile.lock') }}
         restore-keys: |
           ${{ env.CACHE_VERSION }}-${{ runner.os }}-pipenv-${{ steps.python.outputs.python-version }}-
 
@@ -203,10 +203,10 @@ jobs:
     strategy:
       matrix:
         plex: ['unclaimed', 'claimed']
-        is-master:
-          - ${{ github.ref == 'refs/heads/master' }}
+        is-main:
+          - ${{ github.ref == 'refs/heads/main' }}
         exclude:
-          - is-master: false
+          - is-main: false
             plex: claimed
     steps:
     - name: Check out code from GitHub
@@ -228,7 +228,7 @@ jobs:
         key: >-
           ${{ env.CACHE_VERSION}}-${{ runner.os }}-pipenv-${{
           steps.python.outputs.python-version }}-${{
-          hashFiles('requirements_dev.txt') }}
+          hashFiles('**/Pipfile.lock') }}
         restore-keys: |
           ${{ env.CACHE_VERSION}}-${{ runner.os }}-pipenv-${{ steps.python.outputs.python-version }}-
 
