@@ -151,7 +151,7 @@ jobs:
 
     - name: Bootstrap ${{ matrix.plex }} Plex server
       run: |
-        python \
+        pipenv run python \
           -u tools/plex-bootstraptest.py \
           --destination plex \
           --advertise-ip 127.0.0.1 \
@@ -163,7 +163,7 @@ jobs:
       env:
         TEST_ACCOUNT_ONCE: ${{ matrix.plex == 'unclaimed' }}
       run: |
-        pytest \
+        pipenv run pytest \
           -rxXs \
           --ignore=tests/test_sync.py \
           --tb=native \
@@ -174,7 +174,7 @@ jobs:
     - name: Sync tests with ${{ matrix.plex }} server
       if: matrix.plex == 'claimed'
       run: |
-        pytest \
+        pipenv run pytest \
           -rxXs \
           --tb=native \
           --verbose \
@@ -185,7 +185,7 @@ jobs:
     - name: Unlink PMS from MyPlex account
       if: matrix.plex == 'claimed' && always()
       run: |
-        python -u tools/plex-teardowntest.py
+        pipenv run python -u tools/plex-teardowntest.py
 
     - name: Upload coverage artifact
       uses: actions/upload-artifact@v2
