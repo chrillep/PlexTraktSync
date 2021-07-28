@@ -243,9 +243,9 @@ jobs:
 
     - name: Combine ${{ matrix.plex }} coverage results
       run: |
-        coverage combine coverage-${{ matrix.plex }}*/.coverage*
-        coverage report --fail-under=50
-        coverage xml
+        pipenv run coverage combine coverage-${{ matrix.plex }}*/.coverage*
+        pipenv run coverage report --fail-under=50
+        pipenv run coverage xml
 
     - name: Upload ${{ matrix.plex }} coverage to Codecov
       uses: codecov/codecov-action@v2.0.2
