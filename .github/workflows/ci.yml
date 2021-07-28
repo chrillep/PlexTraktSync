@@ -168,7 +168,7 @@ jobs:
           --ignore=tests/test_sync.py \
           --tb=native \
           --verbose \
-          --cov=plexapi \
+          --cov=plex_trakt_sync \
           tests
 
     - name: Sync tests with ${{ matrix.plex }} server
@@ -178,7 +178,7 @@ jobs:
           -rxXs \
           --tb=native \
           --verbose \
-          --cov=plexapi \
+          --cov=plex_trakt_sync \
           --cov-append \
           tests/test_sync.py
 
@@ -248,6 +248,6 @@ jobs:
         coverage xml
 
     - name: Upload ${{ matrix.plex }} coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v2.0.2
       with:
         flags: ${{ matrix.plex }}
