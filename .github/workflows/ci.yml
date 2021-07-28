@@ -42,7 +42,7 @@ jobs:
           ${{ env.CACHE_VERSION }}-${{ runner.os }}-pipenv-${{ steps.python.outputs.python-version }}-
 
     - name: Create Python virtual environment
-pipenv      run: |
+      run: |
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv install --dev flake8
