@@ -225,7 +225,7 @@ jobs:
           ~/.cache/pip
           ~/.local/share/virtualenvs
         key: >-
-          ${{ env.CACHE_VERSION}}-${{ runner.os }}-pipenv-${{
+          ${{ env.CACHE_VERSION }}-${{ runner.os }}-pipenv-${{
           steps.python.outputs.python-version }}-${{
           hashFiles('**/Pipfile.lock') }}
         restore-keys: |
