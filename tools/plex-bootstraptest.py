@@ -195,10 +195,10 @@ def setup_images(photos_path):
 def setup_show(tvshows_path):
     print("Setup files for the TV-Shows section..")
     makedirs(tvshows_path, exist_ok=True)
-    makedirs(os.path.join(tvshows_path, "Game of Thrones"), exist_ok=True)
+    makedirs(os.path.join(tvshows_path, "The Addams Family (1964)"), exist_ok=True)
     makedirs(os.path.join(tvshows_path, "The 100"), exist_ok=True)
     required_tv_shows = {
-        "Game of Thrones": [list(range(1, 11)), list(range(1, 11))],
+        "The Addams Family (1964)": [list(range(1, 11)), list(range(1, 11))],
         "The 100": [list(range(1, 14)), list(range(1, 17))],
     }
     expected_media_count = 0
