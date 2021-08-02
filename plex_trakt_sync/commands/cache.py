@@ -41,19 +41,18 @@ def render_xml(data):
 
     root = ElementTree.fromstring(data)
 
-    return ElementTree.tostring(root, encoding='utf8').decode('utf8')
+    return ElementTree.tostring(root, encoding="utf8").decode("utf8")
 
 
 def inspect_url(session: CachedSession, url: str):
     matches = [
-        response
-        for response in session.cache.responses.values()
+        response for response in session.cache.responses.values()
         if response.url == url
     ]
     for m in matches:
         print(f"## {m.url}")
-        content_type = m.headers['Content-Type']
-        if content_type[:8] == 'text/xml':
+        content_type = m.headers["Content-Type"]
+        if content_type[:8] == "text/xml":
             print(render_xml(m.content))
         else:
             print(m.content)
@@ -64,20 +63,17 @@ def inspect_url(session: CachedSession, url: str):
     "--sort",
     type=click.Choice(["size", "date", "url"], case_sensitive=False),
     default="size",
-    show_default=True, help="Sort mode"
+    show_default=True,
+    help="Sort mode",
 )
 @click.option(
     "--limit",
     type=int,
     default=20,
-    show_default=True, help="Limit entries to be printed"
+    show_default=True,
+    help="Limit entries to be printed",
 )
-@click.option(
-    "--reverse",
-    is_flag=True,
-    default=False,
-    help="Sort reverse"
-)
+@click.option("--reverse", is_flag=True, default=False, help="Sort reverse")
 @click.argument("url", required=False)
 def cache(sort: str, limit: int, reverse: bool, url: str):
     """
@@ -86,7 +82,7 @@ def cache(sort: str, limit: int, reverse: bool, url: str):
 
     config = factory.config()
     trakt_cache = config["cache"]["path"]
-    session = CachedSession(cache_name=trakt_cache, backend='sqlite')
+    session = CachedSession(cache_name=trakt_cache, backend="sqlite")
 
     if url:
         inspect_url(session, url)
