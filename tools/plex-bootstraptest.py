@@ -73,9 +73,9 @@ DOCKER_CMD = [
     "plexinc/pms-docker:%(image_tag)s",
 ]
 
-
 BASE_DIR_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STUB_MOVIE_PATH = os.path.join(BASE_DIR_PATH, "tests", "data", "video_stub.mp4")
+STUB_MOVIE_PATH = os.path.join(BASE_DIR_PATH, "tests", "data",
+                               "video_stub.mp4")
 STUB_MP3_PATH = os.path.join(BASE_DIR_PATH, "tests", "data", "audio_stub.mp3")
 STUB_IMAGE_PATH = os.path.join(BASE_DIR_PATH, "tests", "data", "cute_cat.jpg")
 
@@ -117,22 +117,20 @@ def setup_music(music_path):
     makedirs(music_path, exist_ok=True)
 
     all_music = {
-
         "Broke for free": {
             "Layers": [
                 "1 - As Colorful As Ever.mp3",
-                #"02 - Knock Knock.mp3",
-                #"03 - Only Knows.mp3",
-                #"04 - If.mp3",
-                #"05 - Note Drop.mp3",
-                #"06 - Murmur.mp3",
-                #"07 - Spellbound.mp3",
-                #"08 - The Collector.mp3",
-                #"09 - Quit Bitching.mp3",
-                #"10 - A Year.mp3",
+                # "02 - Knock Knock.mp3",
+                # "03 - Only Knows.mp3",
+                # "04 - If.mp3",
+                # "05 - Note Drop.mp3",
+                # "06 - Murmur.mp3",
+                # "07 - Spellbound.mp3",
+                # "08 - The Collector.mp3",
+                # "09 - Quit Bitching.mp3",
+                # "10 - A Year.mp3",
             ]
         },
-
     }
 
     for artist, album in all_music.items():
@@ -172,7 +170,7 @@ def setup_images(photos_path):
     makedirs(photos_path, exist_ok=True)
     # expected_photo_count = 0
     folders = {
-        ("Cats",): 3,
+        ("Cats", ): 3,
         ("Cats", "Cats in bed"): 7,
         ("Cats", "Cats not in bed"): 1,
         ("Cats", "Not cats in bed"): 1,
@@ -185,7 +183,8 @@ def setup_images(photos_path):
         while photos_in_folder < required_cnt:
             # Dunno why this is need got permission error on photo0.jpg
             photos_in_folder += 1
-            full_path = os.path.join(folder_path, "photo%d.jpg" % photos_in_folder)
+            full_path = os.path.join(folder_path,
+                                     "photo%d.jpg" % photos_in_folder)
             copyfile(STUB_IMAGE_PATH, full_path)
             has_photos += photos_in_folder
 
@@ -195,10 +194,12 @@ def setup_images(photos_path):
 def setup_show(tvshows_path):
     print("Setup files for the TV-Shows section..")
     makedirs(tvshows_path, exist_ok=True)
-    makedirs(os.path.join(tvshows_path, "The Addams Family (1964)"), exist_ok=True)
+    makedirs(os.path.join(tvshows_path, "The Addams Family (1964)"),
+             exist_ok=True)
     makedirs(os.path.join(tvshows_path, "The 100"), exist_ok=True)
     required_tv_shows = {
-        "The Addams Family (1964)": [list(range(1, 11)), list(range(1, 11))],
+        "The Addams Family (1964)": [list(range(1, 11)),
+                                     list(range(1, 11))],
         "The 100": [list(range(1, 14)), list(range(1, 17))],
     }
     expected_media_count = 0
@@ -206,9 +207,8 @@ def setup_show(tvshows_path):
         for season_id, episodes in enumerate(seasons, start=1):
             for episode_id in episodes:
                 expected_media_count += 1
-                episode_path = get_tvshow_path(
-                    tvshows_path, show_name, season_id, episode_id
-                )
+                episode_path = get_tvshow_path(tvshows_path, show_name,
+                                               season_id, episode_id)
                 if not os.path.isfile(episode_path):
                     copyfile(STUB_MOVIE_PATH, episode_path)
 
@@ -216,22 +216,18 @@ def setup_show(tvshows_path):
 
 
 def get_default_ip():
-    """ Return the first IP address of the current machine if available. """
+    """Return the first IP address of the current machine if available."""
     available_ips = list(
-        set(
-            [
-                i[4][0]
-                for i in socket.getaddrinfo(socket.gethostname(), None)
-                if i[4][0] not in ("127.0.0.1", "::1")
-                and not i[4][0].startswith("fe80:")
-            ]
-        )
-    )
+        set([
+            i[4][0] for i in socket.getaddrinfo(socket.gethostname(), None)
+            if i[4][0] not in ("127.0.0.1",
+                               "::1") and not i[4][0].startswith("fe80:")
+        ]))
     return available_ips[0] if len(available_ips) else None
 
 
 def get_plex_account(opts):
-    """ Authenitcate with Plex using the command line options. """
+    """Authenitcate with Plex using the command line options."""
     if not opts.unclaimed:
         if opts.token:
             return MyPlexAccount(token=opts.token)
@@ -240,18 +236,19 @@ def get_plex_account(opts):
 
 
 def get_movie_path(movies_path, name, year):
-    """ Return a movie path given its title and year. """
+    """Return a movie path given its title and year."""
     return os.path.join(movies_path, "%s (%d).mp4" % (name, year))
 
 
 def get_tvshow_path(tvshows_path, name, season, episode):
-    """ Return a TV show path given its title, season, and episode. """
-    return os.path.join(tvshows_path, name, "S%02dE%02d.mp4" % (season, episode))
+    """Return a TV show path given its title, season, and episode."""
+    return os.path.join(tvshows_path, name,
+                        "S%02dE%02d.mp4" % (season, episode))
 
 
 def add_library_section(server, section):
-    """ Add the specified section to our Plex instance. This tends to be a bit
-        flaky, so we retry a few times here.
+    """Add the specified section to our Plex instance. This tends to be a bit
+    flaky, so we retry a few times here.
     """
     start = time.time()
     runtime = 0
@@ -271,7 +268,7 @@ def add_library_section(server, section):
 def create_section(server, section, opts):
     processed_media = 0
     expected_media_count = section.pop("expected_media_count", 0)
-    expected_media_type = (section["type"],)
+    expected_media_type = (section["type"], )
     if section["type"] == "show":
         expected_media_type = ("show", "season", "episode")
     if section["type"] == "artist":
@@ -279,40 +276,34 @@ def create_section(server, section, opts):
     expected_media_type = tuple(SEARCHTYPES[t] for t in expected_media_type)
 
     def alert_callback(data):
-        """ Listen to the Plex notifier to determine when metadata scanning is complete. """
+        """Listen to the Plex notifier to determine when metadata scanning is complete."""
         global processed_media
         if data["type"] == "timeline":
             for entry in data["TimelineEntry"]:
-                if (
-                    entry.get("identifier", "com.plexapp.plugins.library")
-                    == "com.plexapp.plugins.library"
-                ):
+                if (entry.get("identifier", "com.plexapp.plugins.library") ==
+                        "com.plexapp.plugins.library"):
                     # Missed mediaState means that media was processed (analyzed & thumbnailed)
-                    if (
-                        "mediaState" not in entry
-                        and entry["type"] in expected_media_type
-                    ):
+                    if ("mediaState" not in entry
+                            and entry["type"] in expected_media_type):
                         # state=5 means record processed, applicable only when metadata source was set
                         if entry["state"] == 5:
                             cnt = 1
                             if entry["type"] == SEARCHTYPES["show"]:
                                 show = server.library.sectionByID(
-                                    entry["sectionID"]
-                                ).get(entry["title"])
+                                    entry["sectionID"]).get(entry["title"])
                                 cnt = show.leafCount
                             bar.update(cnt)
                             processed_media += cnt
                         # state=1 means record processed, when no metadata source was set
-                        elif (
-                            entry["state"] == 1
-                            and entry["type"] == SEARCHTYPES["photo"]
-                        ):
+                        elif (entry["state"] == 1
+                              and entry["type"] == SEARCHTYPES["photo"]):
                             bar.update()
                             processed_media += 1
 
     runtime = 0
     start = time.time()
-    bar = tqdm(desc="Scanning section " + section["name"], total=expected_media_count)
+    bar = tqdm(desc="Scanning section " + section["name"],
+               total=expected_media_count)
     notifier = server.startAlertListener(alert_callback)
     time.sleep(3)
     add_library_section(server, section)
@@ -346,12 +337,13 @@ if __name__ == "__main__":
         action="store_true",
     )
     # Test environment arguments
-    parser.add_argument(
-        "--no-docker", help="Use docker", default=False, action="store_true"
-    )
-    parser.add_argument(
-        "--timezone", help="Timezone to set inside plex", default="UTC"
-    )  # noqa
+    parser.add_argument("--no-docker",
+                        help="Use docker",
+                        default=False,
+                        action="store_true")
+    parser.add_argument("--timezone",
+                        help="Timezone to set inside plex",
+                        default="UTC")  # noqa
     parser.add_argument(
         "--destination",
         help="Local path where to store all the media",
@@ -363,9 +355,9 @@ if __name__ == "__main__":
         required=default_ip is None,
         default=default_ip,
     )  # noqa
-    parser.add_argument(
-        "--docker-tag", help="Docker image tag to install", default="latest"
-    )  # noqa
+    parser.add_argument("--docker-tag",
+                        help="Docker image tag to install",
+                        default="latest")  # noqa
     parser.add_argument(
         "--bootstrap-timeout",
         help="Timeout for each step of bootstrap, in seconds (default: %(default)s)",
@@ -377,9 +369,10 @@ if __name__ == "__main__":
         help="Name for the new server",
         default="plex-test-docker-%s" % str(uuid4()),
     )  # noqa
-    parser.add_argument(
-        "--accept-eula", help="Accept Plex`s EULA", default=False, action="store_true"
-    )  # noqa
+    parser.add_argument("--accept-eula",
+                        help="Accept Plex`s EULA",
+                        default=False,
+                        action="store_true")  # noqa
     parser.add_argument(
         "--without-movies",
         help="Do not create Movies section",
@@ -423,14 +416,13 @@ if __name__ == "__main__":
 
     # Download the Plex Docker image
     if opts.no_docker is False:
-        print(
-            "Creating Plex instance named %s with advertised ip %s"
-            % (opts.server_name, opts.advertise_ip)
-        )
+        print("Creating Plex instance named %s with advertised ip %s" %
+              (opts.server_name, opts.advertise_ip))
         if which("docker") is None:
             print("Docker is required to be available")
             exit(1)
-        if call(["docker", "pull", "plexinc/pms-docker:%s" % opts.docker_tag]) != 0:
+        if call(["docker", "pull",
+                 "plexinc/pms-docker:%s" % opts.docker_tag]) != 0:
             print("Got an error when executing docker pull!")
             exit(1)
 
@@ -449,8 +441,8 @@ if __name__ == "__main__":
         exit_code = call(docker_cmd)
         if exit_code != 0:
             raise SystemExit(
-                "Error %s while starting the Plex docker container" % exit_code
-            )
+                "Error %s while starting the Plex docker container" %
+                exit_code)
 
     # Wait for the Plex container to start
     print("Waiting for the Plex to start..")
@@ -474,11 +466,11 @@ if __name__ == "__main__":
         runtime = time.time() - start
 
     if not server:
-        raise SystemExit(
-            "Server didnt appear in your account after %ss" % opts.bootstrap_timeout
-        )
+        raise SystemExit("Server didnt appear in your account after %ss" %
+                         opts.bootstrap_timeout)
 
-    print("Plex container started after %ss, setting up content" % int(runtime))
+    print("Plex container started after %ss, setting up content" %
+          int(runtime))
 
     if opts.accept_eula:
         server.settings.get("acceptedEULA").set(True)
@@ -498,14 +490,12 @@ if __name__ == "__main__":
     # Like i did....
     if len(server.library.sections()) and opts.no_docker is True:
         ans = input(
-            "The server has %s sections, do you wish to remove it?\n> "
-            % len(server.library.sections())
-        )
+            "The server has %s sections, do you wish to remove it?\n> " %
+            len(server.library.sections()))
         if ans in ("y", "Y", "Yes"):
             ans = input(
                 "Are you really sure you want to delete %s libraries? There is no way back\n> "
-                % len(server.library.sections())
-            )
+                % len(server.library.sections()))
             if ans in ("y", "Y", "Yes"):
                 clean_pms(server, path)
             else:
@@ -521,13 +511,13 @@ if __name__ == "__main__":
             dict(
                 name="Movies",
                 type="movie",
-                location="/data/Movies" if opts.no_docker is False else movies_path,
+                location="/data/Movies"
+                if opts.no_docker is False else movies_path,
                 agent="tv.plex.agents.movie",
                 scanner="Plex Movie",
                 language="en-US",
                 expected_media_count=num_movies,
-            )
-        )
+            ))
 
     # Prepare TV Show section
     if opts.with_shows:
@@ -538,13 +528,13 @@ if __name__ == "__main__":
             dict(
                 name="TV Shows",
                 type="show",
-                location="/data/TV-Shows" if opts.no_docker is False else tvshows_path,
+                location="/data/TV-Shows"
+                if opts.no_docker is False else tvshows_path,
                 agent="tv.plex.agents.series",
                 scanner="Plex TV Series",
                 language="en-US",
                 expected_media_count=num_ep,
-            )
-        )
+            ))
 
     # Prepare Music section
     if opts.with_music:
@@ -555,12 +545,12 @@ if __name__ == "__main__":
             dict(
                 name="Music",
                 type="artist",
-                location="/data/Music" if opts.no_docker is False else music_path,
+                location="/data/Music"
+                if opts.no_docker is False else music_path,
                 agent="tv.plex.agents.music",
                 scanner="Plex Music",
                 expected_media_count=song_c,
-            )
-        )
+            ))
 
     # Prepare Photos section
     if opts.with_photos:
@@ -571,12 +561,12 @@ if __name__ == "__main__":
             dict(
                 name="Photos",
                 type="photo",
-                location="/data/Photos" if opts.no_docker is False else photos_path,
+                location="/data/Photos"
+                if opts.no_docker is False else photos_path,
                 agent="com.plexapp.agents.none",
                 scanner="Plex Photo Scanner",
                 expected_media_count=has_photos,
-            )
-        )
+            ))
 
     # Create the Plex library in our instance
     if sections:
