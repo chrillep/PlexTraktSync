@@ -1,16 +1,16 @@
 import json
 from json import JSONDecodeError
+from os import getenv
+from os.path import exists
 
 from dotenv import load_dotenv
-from os import getenv
-from plex_trakt_sync.path import config_file, env_file, default_config_file
-from os.path import exists
+
+from plex_trakt_sync.path import config_file, default_config_file, env_file
 
 """
 Platform name to identify our application
 """
 PLEX_PLATFORM = "PlexTraktSync"
-
 """
 Constant in seconds for how much to wait between Trakt POST API calls.
 """

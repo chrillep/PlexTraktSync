@@ -1,7 +1,7 @@
 from typing import List
 
 from plex_trakt_sync.decorators.measure_time import measure_time
-from plex_trakt_sync.media import MediaFactory, Media
+from plex_trakt_sync.media import Media, MediaFactory
 from plex_trakt_sync.plex_api import PlexApi
 
 
@@ -10,7 +10,12 @@ class Walker:
     Class dealing with finding and walking library, movies/shows, episodes
     """
 
-    def __init__(self, plex: PlexApi, mf: MediaFactory, progressbar=None, movies=True, shows=True):
+    def __init__(self,
+                 plex: PlexApi,
+                 mf: MediaFactory,
+                 progressbar=None,
+                 movies=True,
+                 shows=True):
         self._progressbar = progressbar
         self.plex = plex
         self.mf = mf
@@ -62,7 +67,8 @@ class Walker:
         if self.movie:
             movies = self.media_from_titles("movie", self.movie)
         else:
-            movies = self.media_from_sections(self.plex.movie_sections(), self.library)
+            movies = self.media_from_sections(self.plex.movie_sections(),
+                                              self.library)
 
         yield from movies
 
@@ -80,7 +86,8 @@ class Walker:
         if self.show:
             shows = self.media_from_titles("show", self.show)
         else:
-            shows = self.media_from_sections(self.plex.show_sections(), self.library)
+            shows = self.media_from_sections(self.plex.show_sections(),
+                                             self.library)
 
         yield from shows
 
@@ -98,7 +105,11 @@ class Walker:
 
         for section in sections:
             with measure_time(f"{section.title} processed"):
-                it = self.progressbar(section.items(), total=len(section), desc=f"Processing {section.title}")
+                it = self.progressbar(
+                    section.items(),
+                    total=len(section),
+                    desc=f"Processing {section.title}",
+                )
                 yield from it
 
     def media_from_titles(self, libtype: str, titles: List[str]):
