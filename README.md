@@ -1,5 +1,7 @@
 # Plex-Trakt-Sync
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9afe89bf8a1143769179deb6ec991287)](https://app.codacy.com/gh/chrillep/PlexTraktSync?utm_source=github.com&utm_medium=referral&utm_content=chrillep/PlexTraktSync&utm_campaign=Badge_Grade_Settings)
+
 ![Python Versions][python-versions-badge]
 
 This project adds a two-way-sync between trakt.tv and Plex Media Server. It
