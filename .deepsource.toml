@@ -3,7 +3,11 @@ version = 1
 test_patterns = ["tests/**"]
 
 [[analyzers]]
-name = "sql"
+name = "shell"
+enabled = true
+
+[[analyzers]]
+name = "secrets"
 enabled = true
 
 [[analyzers]]
@@ -11,11 +15,7 @@ name = "docker"
 enabled = true
 
 [[analyzers]]
-name = "shell"
-enabled = true
-
-[[analyzers]]
-name = "secrets"
+name = "sql"
 enabled = true
 
 [[analyzers]]
@@ -30,11 +30,11 @@ name = "test-coverage"
 enabled = true
 
 [[transformers]]
-name = "yapf"
+name = "isort"
 enabled = true
 
 [[transformers]]
-name = "isort"
+name = "yapf"
 enabled = true
 
 [[transformers]]
