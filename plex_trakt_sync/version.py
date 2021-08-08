@@ -8,6 +8,6 @@ def git_version_info():
     if not commit:
         return None
 
-    message = commit['message'].split("\n")[0]
+    message = commit["message"].split("\n")[0]
 
     return f"{commit['commit'][0:8]}: {message} @{commit['author_date']}"
