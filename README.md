@@ -1,6 +1,16 @@
 # Plex-Trakt-Sync
 
 ![Python Versions][python-versions-badge]
+[![codecov](https://codecov.io/gh/chrillep/PlexTraktSync/branch/main/graph/badge.svg?token=zItqunfZMx)](https://codecov.io/gh/chrillep/PlexTraktSync)
+[![Coverage Status](https://coveralls.io/repos/github/chrillep/PlexTraktSync/badge.svg?branch=main)](https://coveralls.io/github/chrillep/PlexTraktSync?branch=main)
+[![Maintainability](https://api.codeclimate.com/v1/badges/202494bb25e9fdf3237a/maintainability)](https://codeclimate.com/github/chrillep/PlexTraktSync/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/202494bb25e9fdf3237a/test_coverage)](https://codeclimate.com/github/chrillep/PlexTraktSync/test_coverage)
+[![DeepSource](https://deepsource.io/gh/chrillep/PlexTraktSync.svg/?label=active+issues&show_trend=true&token=Aoxjo5g7oPlk3u2p_teIGiJk)](https://deepsource.io/gh/chrillep/PlexTraktSync/?ref=repository-badge)
+[![DeepSource](https://deepsource.io/gh/chrillep/PlexTraktSync.svg/?label=resolved+issues&show_trend=true&token=Aoxjo5g7oPlk3u2p_teIGiJk)](https://deepsource.io/gh/chrillep/PlexTraktSync/?ref=repository-badge)
+[![CodeFactor](https://www.codefactor.io/repository/github/chrillep/plextraktsync/badge)](https://www.codefactor.io/repository/github/chrillep/plextraktsync)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f52479ce6010470d8599ac194c6ac987)](https://www.codacy.com/gh/chrillep/PlexTraktSync/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrillep/PlexTraktSync&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/f52479ce6010470d8599ac194c6ac987)](https://www.codacy.com/gh/chrillep/PlexTraktSync/dashboard?utm_source=github.com&utm_medium=referral&utm_content=chrillep/PlexTraktSync&utm_campaign=Badge_Coverage)
+[![Known Vulnerabilities](https://snyk.io/test/github/chrillep/PlexTraktSync/badge.svg)](https://snyk.io/test/github/chrillep/PlexTraktSync)
 
 This project adds a two-way-sync between trakt.tv and Plex Media Server. It
 requires a trakt.tv account but no Plex premium and no Trakt VIP subscriptions,
