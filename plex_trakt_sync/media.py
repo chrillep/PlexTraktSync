@@ -13,7 +13,11 @@ class Media:
     Class containing Plex and Trakt media items (Movie, Episode)
     """
 
-    def __init__(self, plex, trakt, plex_api: PlexApi = None, trakt_api: TraktApi = None):
+    def __init__(self,
+                 plex,
+                 trakt,
+                 plex_api: PlexApi = None,
+                 trakt_api: TraktApi = None):
         self.plex_api = plex_api
         self.trakt_api = trakt_api
         self.plex = plex
@@ -69,7 +73,8 @@ class Media:
             return self.trakt_id in self.trakt_api.watched_movies
 
         watched = self.trakt_api.watched_shows
-        return watched.get_completed(self.show_trakt_id, self.season_number, self.episode_number)
+        return watched.get_completed(self.show_trakt_id, self.season_number,
+                                     self.episode_number)
 
     def mark_watched_trakt(self):
         self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
@@ -130,7 +135,9 @@ class MediaFactory:
 
     def resolve_guid(self, guid: PlexGuid, tm=None):
         if guid.provider in ["local", "none", "agents.none"]:
-            logger.warning(f"{guid.pm.item}: Skipping guid {guid} because provider {guid.provider} has no external Id")
+            logger.warning(
+                f"{guid.pm.item}: Skipping guid {guid} because provider {guid.provider} has no external Id"
+            )
 
             return None
 
@@ -146,11 +153,13 @@ class MediaFactory:
             else:
                 tm = self.trakt.find_by_guid(guid)
         except (TraktException, RequestException) as e:
-            logger.warning(f"{guid.pm.item}: Skipping guid {guid} Trakt errors: {e}")
+            logger.warning(
+                f"{guid.pm.item}: Skipping guid {guid} Trakt errors: {e}")
             return None
 
         if tm is None:
-            logger.warning(f"{guid.pm.item}: Skipping guid {guid} not found on Trakt")
+            logger.warning(
+                f"{guid.pm.item}: Skipping guid {guid} not found on Trakt")
             return None
 
         return Media(guid.pm, tm, plex_api=self.plex, trakt_api=self.trakt)
