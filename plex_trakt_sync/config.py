@@ -1,10 +1,11 @@
 import json
 from json import JSONDecodeError
+from os import getenv
+from os.path import exists
 
 from dotenv import load_dotenv
-from os import getenv
-from plex_trakt_sync.path import config_file, env_file, default_config_file
-from os.path import exists
+
+from plex_trakt_sync.path import config_file, default_config_file, env_file
 
 """
 Platform name to identify our application
@@ -64,7 +65,8 @@ class Config(dict):
                 else:
                     txt.write("{}=\n".format(key))
 
-    def load_json(self, path):
+    @staticmethod
+    def load_json(path):
         with open(path, "r") as fp:
             try:
                 config = json.load(fp)

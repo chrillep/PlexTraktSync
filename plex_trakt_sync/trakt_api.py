@@ -1,25 +1,25 @@
 from typing import Union
 
 import trakt
-import trakt.users
-import trakt.sync
 import trakt.movies
+import trakt.sync
+import trakt.users
 from trakt.core import load_config
+from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
-from trakt.tv import TVShow, TVSeason, TVEpisode
-from trakt.errors import OAuthException, ForbiddenException
 from trakt.sync import Scrobbler
+from trakt.tv import TVEpisode, TVSeason, TVShow
 
-from plex_trakt_sync.factory import factory
-from plex_trakt_sync.logging import logger
+from plex_trakt_sync import pytrakt_extensions
 from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.nocache import nocache
 from plex_trakt_sync.decorators.rate_limit import rate_limit
 from plex_trakt_sync.decorators.time_limit import time_limit
-from plex_trakt_sync import pytrakt_extensions
+from plex_trakt_sync.factory import factory
+from plex_trakt_sync.logging import logger
 from plex_trakt_sync.path import pytrakt_file
-from plex_trakt_sync.plex_api import PlexLibraryItem, PlexGuid
+from plex_trakt_sync.plex_api import PlexGuid, PlexLibraryItem
 
 
 class ScrobblerProxy:
@@ -60,7 +60,8 @@ class TraktApi:
         trakt.core.session = factory.session()
         load_config()
 
-    def device_auth(self, client_id: str, client_secret: str):
+    @staticmethod
+    def device_auth(client_id: str, client_secret: str):
         trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
 
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
@@ -170,7 +171,8 @@ class TraktApi:
     def rate(self, m, rating):
         m.rate(rating)
 
-    def scrobbler(self, media: Union[Movie, TVEpisode]) -> ScrobblerProxy:
+    @staticmethod
+    def scrobbler(media: Union[Movie, TVEpisode]) -> ScrobblerProxy:
         scrobbler = media.scrobble(0, None, None)
         return ScrobblerProxy(scrobbler)
 
@@ -321,10 +323,12 @@ class TraktBatch:
         self.collection[media_type].append(item)
         self.flush()
 
-    def trakt_sync_collection(self, media_object):
+    @staticmethod
+    def trakt_sync_collection(media_object):
         return trakt.sync.add_to_collection(media_object)
 
-    def remove_empty_values(self, result):
+    @staticmethod
+    def remove_empty_values(result):
         """
         Update result to remove empty changes.
         This makes diagnostic printing cleaner if we don't print "changed: 0"

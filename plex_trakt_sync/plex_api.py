@@ -1,17 +1,18 @@
 from __future__ import annotations
-import re
+
 import datetime
+import re
 from typing import Union
 
+from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound
-from plexapi.library import MovieSection, ShowSection, LibrarySection
+from plexapi.library import LibrarySection, MovieSection, ShowSection
 from plexapi.server import PlexServer
+from trakt.utils import timestamp
 
 from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.nocache import nocache
-from trakt.utils import timestamp
-
 from plex_trakt_sync.decorators.rate_limit import rate_limit
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger
@@ -323,7 +324,8 @@ class PlexLibraryItem:
     def episode_number(self):
         return self.item.index
 
-    def date_value(self, date):
+    @staticmethod
+    def date_value(date):
         if not date:
             raise ValueError("Value can't be None")
 
@@ -354,20 +356,38 @@ class PlexLibrarySection:
     def __init__(self, section: LibrarySection):
         self.section = section
 
+    @nocache
     def __len__(self):
-        return len(self.all())
+        return self.section.totalSize
 
     @property
     def title(self):
         return self.section.title
 
-    @nocache
-    def all(self):
-        return self.section.all()
+    def all(self, max_items: int):
+        libtype = self.section.TYPE
+        key = self.section._buildSearchKey(libtype=libtype, returnKwargs=False)
+        start = 0
+        size = X_PLEX_CONTAINER_SIZE
 
-    def items(self):
-        for item in (PlexLibraryItem(x) for x in self.all()):
-            yield item
+        while True:
+            items = self.fetch_items(key, size, start)
+            if not len(items):
+                break
+
+            yield from items
+
+            start += size
+            if start > max_items:
+                break
+
+    @nocache
+    def fetch_items(self, key: str, size: int, start: int):
+        return self.section.fetchItems(key, container_start=start, container_size=size)
+
+    def items(self, max_items: int):
+        for item in self.all(max_items):
+            yield PlexLibraryItem(item)
 
 
 class PlexApi:
