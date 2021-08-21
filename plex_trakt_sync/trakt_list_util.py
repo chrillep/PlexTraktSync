@@ -10,17 +10,25 @@ from plex_trakt_sync.logging import logger
 from plex_trakt_sync.plex_api import PlexApi
 
 
-class TraktList():
+class TraktList:
     def __init__(self, username, listname):
         self.name = listname
         self.plex_items = []
         if username is not None:
-            self.trakt_items = dict(zip([(elem.media_type, elem.trakt) for elem in UserList._get(listname, username)._items if isinstance(elem, (Movie, TVEpisode))], count(1)))
+            self.trakt_items = dict(
+                zip(
+                    [(elem.media_type, elem.trakt)
+                     for elem in UserList._get(listname, username)._items
+                     if isinstance(elem, (Movie, TVEpisode))],
+                    count(1),
+                ))
 
     @staticmethod
     def from_trakt_list(listname, trakt_list):
         l = TraktList(None, listname)
-        l.trakt_items = dict(zip([(elem.media_type, elem.trakt) for elem in trakt_list], count(1)))
+        l.trakt_items = dict(
+            zip([(elem.media_type, elem.trakt) for elem in trakt_list],
+                count(1)))
         return l
 
     def addPlexItem(self, trakt_item, plex_item):
@@ -28,9 +36,15 @@ class TraktList():
         if rank is not None:
             self.plex_items.append((rank, plex_item))
             if isinstance(plex_item, Episode):
-                logger.info('Show [{} ({})]: {} added to list {}'.format(plex_item.show().title, plex_item.show().year, plex_item.seasonEpisode, self.name))
+                logger.info("Show [{} ({})]: {} added to list {}".format(
+                    plex_item.show().title,
+                    plex_item.show().year,
+                    plex_item.seasonEpisode,
+                    self.name,
+                ))
             else:
-                logger.info('Movie [{} ({})]: added to list {}'.format(plex_item.title, plex_item.year, self.name))
+                logger.info("Movie [{} ({})]: added to list {}".format(
+                    plex_item.title, plex_item.year, self.name))
 
     def updatePlexList(self, plex: PlexApi):
         plex.delete_playlist(self.name)
@@ -39,7 +53,7 @@ class TraktList():
             plex.create_playlist(self.name, self.plex_items)
 
 
-class TraktListUtil():
+class TraktListUtil:
     def __init__(self):
         self.lists = []
 
@@ -52,7 +66,8 @@ class TraktListUtil():
             self.lists.append(TraktList(username, listname))
             logger.info("Downloaded List {}".format(listname))
         except (NotFoundException, OAuthException):
-            logger.warning("Failed to get list {} by user {}".format(listname, username))
+            logger.warning("Failed to get list {} by user {}".format(
+                listname, username))
 
     def addPlexItemToLists(self, m):
         for l in self.lists:

@@ -27,14 +27,19 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi, dry_run: bool):
         trakt_liked_lists = trakt.liked_lists
 
     if trakt_watchlist_movies:
-        listutil.addList(None, "Trakt Watchlist", trakt_list=trakt_watchlist_movies)
+        listutil.addList(None,
+                         "Trakt Watchlist",
+                         trakt_list=trakt_watchlist_movies)
 
     for lst in trakt_liked_lists:
-        listutil.addList(lst['username'], lst['listname'])
+        listutil.addList(lst["username"], lst["listname"])
 
-    click.echo(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
+    click.echo(
+        f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
     # Load sections, this will attempt to connect to Plex
-    click.echo(f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}")
+    click.echo(
+        f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}"
+    )
 
     runner = Sync(CONFIG)
     runner.sync(walker, listutil, dry_run=dry_run)
@@ -48,47 +53,58 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi, dry_run: bool):
 
 
 @click.command()
+@click.option("--library", help="Specify Library to use")
+@click.option("--show",
+              "show",
+              type=str,
+              show_default=True,
+              help="Sync specific show only")
+@click.option("--movie",
+              "movie",
+              type=str,
+              show_default=True,
+              help="Sync specific movie only")
 @click.option(
-    "--library",
-    help="Specify Library to use"
-)
-@click.option(
-    "--show", "show",
-    type=str,
-    show_default=True, help="Sync specific show only"
-)
-@click.option(
-    "--movie", "movie",
-    type=str,
-    show_default=True, help="Sync specific movie only"
-)
-@click.option(
-    "--sync", "sync_option",
+    "--sync",
+    "sync_option",
     type=click.Choice(["all", "movies", "tv"], case_sensitive=False),
     default="all",
-    show_default=True, help="Specify what to sync"
+    show_default=True,
+    help="Specify what to sync",
 )
 @click.option(
-    "--batch-size", "batch_size",
+    "--batch-size",
+    "batch_size",
     type=int,
-    default=1, show_default=True,
-    help="Batch size for collection submit queue"
+    default=1,
+    show_default=True,
+    help="Batch size for collection submit queue",
 )
 @click.option(
-    "--dry-run", "dry_run",
+    "--dry-run",
+    "dry_run",
     type=bool,
     default=False,
     is_flag=True,
-    help="Dry run: Do not make changes"
+    help="Dry run: Do not make changes",
 )
 @click.option(
-    "--no-progress-bar", "no_progress_bar",
+    "--no-progress-bar",
+    "no_progress_bar",
     type=bool,
     default=False,
     is_flag=True,
-    help="Don't output progress bars"
+    help="Don't output progress bars",
 )
-def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int, dry_run: bool, no_progress_bar: bool):
+def sync(
+    sync_option: str,
+    library: str,
+    show: str,
+    movie: str,
+    batch_size: int,
+    dry_run: bool,
+    no_progress_bar: bool,
+):
     """
     Perform sync between Plex and Trakt
     """
@@ -98,7 +114,9 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int,
         logger.info(f"PlexTraktSync [{git_version}]")
 
     ensure_login()
-    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
+    logger.info(
+        f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}"
+    )
 
     movies = sync_option in ["all", "movies"]
     tv = sync_option in ["all", "tv"]
@@ -120,7 +138,8 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int,
         logger.info(f"Syncing Movie: {movie}")
 
     if not w.is_valid():
-        click.echo("Nothing to sync, this is likely due conflicting options given.")
+        click.echo(
+            "Nothing to sync, this is likely due conflicting options given.")
         return
 
     if dry_run:

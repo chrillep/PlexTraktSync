@@ -7,11 +7,12 @@ from plex_trakt_sync.walker import Walker
 
 
 @click.option(
-    "--no-progress-bar", "no_progress_bar",
+    "--no-progress-bar",
+    "no_progress_bar",
     type=bool,
     default=False,
     is_flag=True,
-    help="Don't output progress bars"
+    help="Don't output progress bars",
 )
 @click.command()
 def unmatched(no_progress_bar: bool):
@@ -26,7 +27,8 @@ def unmatched(no_progress_bar: bool):
     walker = Walker(plex, mf, progressbar=pb)
 
     if not walker.is_valid():
-        click.echo("Nothing to scan, this is likely due conflicting options given.")
+        click.echo(
+            "Nothing to scan, this is likely due conflicting options given.")
         return
 
     walker.walk_details(print=click.echo)

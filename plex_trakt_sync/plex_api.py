@@ -18,19 +18,17 @@ from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger
 
 AUDIO_CODECS = {
-    'lpcm':                 'pcm',
-    'mp3':                  None,
-    'aac':                  None,
-    'ogg':                  'vorbis',
-    'wma':                  None,
-
-    'dts':                  '(dca|dta)',
-    'dts_ma':               'dtsma',
-
-    'dolby_prologic':       'dolby.?pro',
-    'dolby_digital':        'ac.?3',
-    'dolby_digital_plus':   'eac.?3',
-    'dolby_truehd':         'truehd'
+    "lpcm": "pcm",
+    "mp3": None,
+    "aac": None,
+    "ogg": "vorbis",
+    "wma": None,
+    "dts": "(dca|dta)",
+    "dts_ma": "dtsma",
+    "dolby_prologic": "dolby.?pro",
+    "dolby_digital": "ac.?3",
+    "dolby_digital_plus": "eac.?3",
+    "dolby_truehd": "truehd",
 }
 
 # compile patterns in `AUDIO_CODECS`
@@ -41,7 +39,7 @@ for k, v in AUDIO_CODECS.items():
     try:
         AUDIO_CODECS[k] = re.compile(v, re.IGNORECASE)
     except Exception:
-        logger.warn('Unable to compile regex pattern: %r', v, exc_info=True)
+        logger.warn("Unable to compile regex pattern: %r", v, exc_info=True)
 
 
 class PlexGuid:
@@ -123,7 +121,7 @@ class PlexLibraryItem:
     @property
     @memoize
     def is_legacy_agent(self):
-        return not self.item.guid.startswith('plex://')
+        return not self.item.guid.startswith("plex://")
 
     @property
     @memoize
@@ -146,7 +144,9 @@ class PlexLibraryItem:
         if self.is_legacy_agent:
             return [PlexGuid(self.item.guid, self.type, self)]
 
-        guids = [PlexGuid(guid.id, self.type, self) for guid in self.get_guids()]
+        guids = [
+            PlexGuid(guid.id, self.type, self) for guid in self.get_guids()
+        ]
 
         # take guid in this order:
         # - tmdb, tvdb, then imdb
@@ -197,7 +197,8 @@ class PlexLibraryItem:
     @property
     @memoize
     def rating(self):
-        return int(self.item.userRating) if self.item.userRating is not None else None
+        return int(
+            self.item.userRating) if self.item.userRating is not None else None
 
     @property
     @memoize
@@ -224,9 +225,9 @@ class PlexLibraryItem:
             return None
 
         if channels < 3:
-            return '%.01f' % channels
+            return "%.01f" % channels
 
-        return '%.01f' % (channels - 0.9)
+        return "%.01f" % (channels - 0.9)
 
     @property
     @memoize
@@ -262,22 +263,22 @@ class PlexLibraryItem:
             return None
         # 4k
         if width >= 3840:
-            return 'uhd_4k'
+            return "uhd_4k"
 
         # 1080
         if width >= 1920:
-            return 'hd_1080p'
+            return "hd_1080p"
 
         # 720
         if width >= 1280:
-            return 'hd_720p'
+            return "hd_720p"
 
         # 576
         if width >= 768:
-            return 'sd_576p'
+            return "sd_576p"
 
         # 480
-        return 'sd_480p'
+        return "sd_480p"
 
     @property
     @memoize
@@ -291,10 +292,10 @@ class PlexLibraryItem:
         except (AttributeError, IndexError, TypeError):
             return None
 
-        if colorTrc == 'smpte2084':
-            return 'hdr10'
-        elif colorTrc == 'arib-std-b67':
-            return 'hlg'
+        if colorTrc == "smpte2084":
+            return "hdr10"
+        elif colorTrc == "arib-std-b67":
+            return "hlg"
 
         try:
             dovi = stream.DOVIPresent
@@ -302,7 +303,7 @@ class PlexLibraryItem:
             return None
 
         if dovi:
-            return 'dolby_vision'
+            return "dolby_vision"
 
         return None
 
@@ -383,7 +384,9 @@ class PlexLibrarySection:
 
     @nocache
     def fetch_items(self, key: str, size: int, start: int):
-        return self.section.fetchItems(key, container_start=start, container_size=size)
+        return self.section.fetchItems(key,
+                                       container_start=start,
+                                       container_size=size)
 
     def items(self, max_items: int):
         for item in self.all(max_items):
@@ -486,7 +489,8 @@ class PlexApi:
         try:
             self.plex.playlist(name).delete()
         except (NotFound, BadRequest):
-            logger.debug(f"Playlist '{name}' not found, so it could not be deleted")
+            logger.debug(
+                f"Playlist '{name}' not found, so it could not be deleted")
 
     @nocache
     def mark_watched(self, m):
