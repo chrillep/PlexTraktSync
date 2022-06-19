@@ -53,7 +53,8 @@ def render_json(data):
 
 def inspect_url(session: CachedSession, url: str):
     matches = [
-        response for response in session.cache.responses.values() if response.url == url
+        response for response in session.cache.responses.values()
+        if response.url == url
     ]
     for m in matches:
         content_type = m.headers["Content-Type"]

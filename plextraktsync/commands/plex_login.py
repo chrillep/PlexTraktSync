@@ -13,36 +13,40 @@ from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
 
 from plextraktsync.factory import factory
-from plextraktsync.style import (comment, disabled, error, highlight, prompt,
-                                 success, title)
+from plextraktsync.style import (
+    comment,
+    disabled,
+    error,
+    highlight,
+    prompt,
+    success,
+    title,
+)
 
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username or e-mail")
 PROMPT_PLEX_RELOGIN = prompt(
-    "You already have Plex Access Token, do you want to log in again?"
-)
+    "You already have Plex Access Token, do you want to log in again?")
 SUCCESS_MESSAGE = success(
     "Plex Media Server Authentication Token and base URL have been added to .env file"
 )
 NOTICE_2FA_PASSWORD = comment(
     "If you have 2 Factor Authentication enabled on Plex "
-    "you can append the code to your password below (eg. passwordCODE)"
-)
+    "you can append the code to your password below (eg. passwordCODE)")
 CONFIG = factory.config()
 
-
-style = get_style(
-    {
-        "questionmark": "hidden",
-        "question": "ansiyellow",
-        "pointer": "fg:ansiblack bg:ansiyellow",
-    }
-)
+style = get_style({
+    "questionmark": "hidden",
+    "question": "ansiyellow",
+    "pointer": "fg:ansiblack bg:ansiyellow",
+})
 
 
 def myplex_login(username, password):
     while True:
-        username = click.prompt(PROMPT_PLEX_USERNAME, type=str, default=username)
+        username = click.prompt(PROMPT_PLEX_USERNAME,
+                                type=str,
+                                default=username)
         click.echo(NOTICE_2FA_PASSWORD)
         password = click.prompt(
             PROMPT_PLEX_PASSWORD,
@@ -158,8 +162,7 @@ def choose_server(account: MyPlexAccount):
             click.echo(
                 title(
                     f"Attempting to connect to {server.name}. This may take time and print some errors."
-                )
-            )
+                ))
             click.echo(title("Server connections:"))
             for c in server.connections:
                 click.echo(f"    {c.uri}")
@@ -194,7 +197,9 @@ def login(username: str, password: str):
     click.echo(success("Login to MyPlex was successful!"))
 
     [server, plex] = choose_server(account)
-    click.echo(success(f"Connection to {plex.friendlyName} established successfully!"))
+    click.echo(
+        success(
+            f"Connection to {plex.friendlyName} established successfully!"))
 
     token = server.accessToken
     user = account.username
@@ -202,7 +207,8 @@ def login(username: str, password: str):
         managed_user = choose_managed_user(account)
         if managed_user:
             user = managed_user
-            token = account.user(managed_user).get_token(plex.machineIdentifier)
+            token = account.user(managed_user).get_token(
+                plex.machineIdentifier)
 
     CONFIG["PLEX_USERNAME"] = user
     CONFIG["PLEX_TOKEN"] = token
@@ -212,13 +218,9 @@ def login(username: str, password: str):
             host_ip = socket.gethostbyname("host.docker.internal")
         except socket.gaierror:
             try:
-                host_ip = (
-                    check_output(
-                        "ip -4 route show default | awk '{ print $3 }'", shell=True
-                    )
-                    .decode()
-                    .rstrip()
-                )
+                host_ip = (check_output(
+                    "ip -4 route show default | awk '{ print $3 }'",
+                    shell=True).decode().rstrip())
             except Exception:
                 host_ip = "172.17.0.1"
         CONFIG["PLEX_LOCALURL"] = f"http://{host_ip}:32400"

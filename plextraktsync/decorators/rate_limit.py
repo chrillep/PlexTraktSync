@@ -3,8 +3,11 @@ from time import sleep
 
 from plexapi.exceptions import BadRequest
 from requests import RequestException
-from trakt.errors import (LockedUserAccountException, RateLimitException,
-                          TraktInternalException)
+from trakt.errors import (
+    LockedUserAccountException,
+    RateLimitException,
+    TraktInternalException,
+)
 
 from plextraktsync.logging import logger
 
@@ -17,6 +20,7 @@ def rate_limit(retries=5):
     """
 
     def decorator(fn):
+
         @wraps(fn)
         def wrapper(*args, **kwargs):
             retry = 0
@@ -24,11 +28,11 @@ def rate_limit(retries=5):
                 try:
                     return fn(*args, **kwargs)
                 except (
-                    BadRequest,
-                    RateLimitException,
-                    RequestException,
-                    TraktInternalException,
-                    LockedUserAccountException,
+                        BadRequest,
+                        RateLimitException,
+                        RequestException,
+                        TraktInternalException,
+                        LockedUserAccountException,
                 ) as e:
                     if retry == retries:
                         logger.error(f"Error: {e}")

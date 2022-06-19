@@ -16,8 +16,7 @@ def test_tv_lookup():
                 make(id="tvdb://268592"),
             ],
             type="show",
-        )
-    )
+        ))
 
     guid = m.guids[0]
 
@@ -33,8 +32,7 @@ def test_tv_lookup_none():
             guid="tv.plex.agents.none://68178",
             guids=[],
             type="show",
-        )
-    )
+        ))
 
     guid = m.guids[0]
 

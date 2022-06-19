@@ -4,6 +4,7 @@ from plextraktsync.walker import WalkConfig, WalkPlanner
 
 
 class PlexLibrarySectionMock(PlexLibrarySection):
+
     def __init__(self, data):
         self.data = data
 
@@ -14,6 +15,7 @@ class PlexLibrarySectionMock(PlexLibrarySection):
 
 
 class PlexMock(PlexApi):
+
     def __init__(self, sections):
         self.sections = sections
 
@@ -37,24 +39,26 @@ class PlexMock(PlexApi):
 
 
 def test_walker():
-    plex = PlexMock(
-        [
-            {
-                "type": "movie",
-                "title": "Movies",
-                "items": [
-                    {"title": "Batman Begins"},
-                ],
-            },
-            {
-                "type": "show",
-                "title": "TV Shows",
-                "items": [
-                    {"title": "Breaking Bad"},
-                ],
-            },
-        ]
-    )
+    plex = PlexMock([
+        {
+            "type": "movie",
+            "title": "Movies",
+            "items": [
+                {
+                    "title": "Batman Begins"
+                },
+            ],
+        },
+        {
+            "type": "show",
+            "title": "TV Shows",
+            "items": [
+                {
+                    "title": "Breaking Bad"
+                },
+            ],
+        },
+    ])
 
     wc = WalkConfig()
     wc.add_library("Movies")

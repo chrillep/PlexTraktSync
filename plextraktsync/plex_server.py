@@ -9,6 +9,7 @@ from plextraktsync.logging import logger
 
 
 class PlexServerConnection:
+
     @staticmethod
     @nocache
     def connect():
@@ -43,16 +44,14 @@ def _get_plex_server():
         server = PlexServer(token=plex_token, baseurl=plex_baseurl)
     except plexapi.server.requests.exceptions.SSLError as e:
         m = "Plex connection error: {}, local url {} didn't respond either.".format(
-            str(e), plex_localurl
-        )
+            str(e), plex_localurl)
         excep_msg = str(e.__context__)
         if "doesn't match '*." in excep_msg:
             hash_pos = excep_msg.find("*.") + 2
             new_hash = excep_msg[hash_pos:hash_pos + 32]
             end_pos = plex_baseurl.find(".plex.direct")
-            new_plex_baseurl = (
-                plex_baseurl[: end_pos - 32] + new_hash + plex_baseurl[end_pos:]
-            )
+            new_plex_baseurl = (plex_baseurl[:end_pos - 32] + new_hash +
+                                plex_baseurl[end_pos:])
             try:  # 1
                 server = PlexServer(token=plex_token, baseurl=new_plex_baseurl)
                 # save new url to .env
@@ -60,7 +59,8 @@ def _get_plex_server():
                 CONFIG["PLEX_BASEURL"] = new_plex_baseurl
                 CONFIG["PLEX_LOCALURL"] = plex_localurl
                 CONFIG.save()
-                logger.info("Plex server url changed to {}".format(new_plex_baseurl))
+                logger.info(
+                    "Plex server url changed to {}".format(new_plex_baseurl))
             except Exception:
                 pass
         if server is None and plex_baseurl[:5] == "https":
@@ -74,16 +74,13 @@ def _get_plex_server():
                 pass
     except Exception as e:
         m = "Plex connection error: {}, local url {} didn't respond either. Check PLEX_LOCALURL in .env file.".format(
-            str(e), plex_localurl
-        )
+            str(e), plex_localurl)
     if server is None:
         try:  # 3
             server = PlexServer(token=plex_token, baseurl=plex_localurl)
             logger.warning(
                 "No response from {}, connection using local url {}".format(
-                    plex_baseurl, plex_localurl
-                )
-            )
+                    plex_baseurl, plex_localurl))
         except Exception:
             logger.error(m)
             print(m)

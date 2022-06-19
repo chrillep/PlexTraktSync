@@ -23,14 +23,15 @@ def lookup_table(show):
         eps = {}
         if "episodes" in season.keys():
             for episode in season["episodes"]:
-                eps[episode["number"]] = LazyEpisode(
-                    show, season["number"], episode["number"], episode["ids"]
-                )
+                eps[episode["number"]] = LazyEpisode(show, season["number"],
+                                                     episode["number"],
+                                                     episode["ids"])
         retVal[season["number"]] = eps
     yield retVal
 
 
 class LazyEpisode:
+
     def __init__(self, show, season, number, ids):
         self.show = show
         self.season = season
@@ -41,9 +42,10 @@ class LazyEpisode:
     @property
     def instance(self):
         if self._instance is None:
-            self._instance = TVEpisode(
-                self.show.title, self.season, number=self.number, **self.ids
-            )
+            self._instance = TVEpisode(self.show.title,
+                                       self.season,
+                                       number=self.number,
+                                       **self.ids)
         return self._instance
 
 
@@ -69,6 +71,7 @@ def collected(show_id):
 
 
 class EpisodeProgress:
+
     def __init__(
         self,
         number=0,
@@ -91,7 +94,13 @@ class EpisodeProgress:
 
 
 class SeasonProgress:
-    def __init__(self, number=0, title=None, aired=0, completed=False, episodes=None):
+
+    def __init__(self,
+                 number=0,
+                 title=None,
+                 aired=0,
+                 completed=False,
+                 episodes=None):
         self.number = number
         self.aired = aired
         self.episodes = {}
@@ -110,6 +119,7 @@ class SeasonProgress:
 
 
 class ShowProgress:
+
     def __init__(
         self,
         aired=0,
@@ -153,6 +163,7 @@ class ShowProgress:
 
 
 class AllWatchedShows:
+
     def __init__(self, shows=None):
         self.shows = {}
         for show in shows:
@@ -171,9 +182,11 @@ class AllWatchedShows:
         season_prog = {"number": season, "episodes": [episode_prog]}
         if trakt_id in self.shows:
             if season in self.shows[trakt_id].seasons:
-                self.shows[trakt_id].seasons[season].episodes[episode] = EpisodeProgress(**episode_prog)
+                self.shows[trakt_id].seasons[season].episodes[
+                    episode] = EpisodeProgress(**episode_prog)
             else:
-                self.shows[trakt_id].seasons[season] = SeasonProgress(**season_prog)
+                self.shows[trakt_id].seasons[season] = SeasonProgress(
+                    **season_prog)
         else:
             self.shows[trakt_id] = ShowProgress(seasons=[season_prog])
 

@@ -8,7 +8,8 @@ from .path import log_dir
 def initialize():
     CONFIG = factory.config()
     # global log level for all messages
-    if ("log_debug_messages" in CONFIG and CONFIG["log_debug_messages"]) or CONFIG["logging"]["debug"]:
+    if ("log_debug_messages" in CONFIG
+            and CONFIG["log_debug_messages"]) or CONFIG["logging"]["debug"]:
         log_level = logging.DEBUG
     else:
         log_level = logging.INFO
@@ -24,8 +25,8 @@ def initialize():
     mode = "a" if CONFIG["logging"]["append"] else "w"
     file_handler = logging.FileHandler(log_file, mode, "utf-8")
     file_handler.setFormatter(
-        logging.Formatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s")
-    )
+        logging.Formatter(
+            "%(asctime)-15s %(levelname)s[%(name)s]:%(message)s"))
     file_handler.setLevel(logging.DEBUG)
 
     handlers = [

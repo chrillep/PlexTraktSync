@@ -12,6 +12,7 @@ def time_limit():
     """
 
     def decorator(fn):
+
         @wraps(fn)
         def wrapper(*args, **kwargs):
             timer.wait_if_needed()

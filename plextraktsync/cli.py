@@ -15,13 +15,15 @@ def command():
     """
 
     def decorator(fn):
+
         @click.command()
         @wraps(fn)
         def wrap(*args, **kwargs):
             import importlib
 
             name = fn.__name__
-            module = importlib.import_module(f".commands.{name}", package=__package__)
+            module = importlib.import_module(f".commands.{name}",
+                                             package=__package__)
             cmd = getattr(module, name)
 
             try:
@@ -135,12 +137,16 @@ def plex_login():
 
 @command()
 @click.option("--library", help="Specify Library to use")
-@click.option(
-    "--show", "show", type=str, show_default=True, help="Sync specific show only"
-)
-@click.option(
-    "--movie", "movie", type=str, show_default=True, help="Sync specific movie only"
-)
+@click.option("--show",
+              "show",
+              type=str,
+              show_default=True,
+              help="Sync specific show only")
+@click.option("--movie",
+              "movie",
+              type=str,
+              show_default=True,
+              help="Sync specific movie only")
 @click.option(
     "--id",
     "ids",
