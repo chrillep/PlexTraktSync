@@ -1,0 +1,23 @@
+name: flake8 Lint
+
+on:
+  - pull_request
+
+env:
+  DEFAULT_PYTHON: 3.7
+
+jobs:
+  flake8-lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+      - name: Set up Python environment
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+
+# vim:ts=2:sw=2:et

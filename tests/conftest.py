@@ -6,7 +6,7 @@ from typing import Union
 
 from trakt.tv import TVShow
 
-from plex_trakt_sync.factory import Factory
+from plextraktsync.factory import Factory
 
 TESTS_DIR = dirname(__file__)
 MOCK_DATA_DIR = join_path(TESTS_DIR, "mock_data")
@@ -27,7 +27,7 @@ for key in config.env_keys:
 
 def load_mock(name: str):
     filename = join_path(MOCK_DATA_DIR, name)
-    with open(filename, encoding='utf-8') as f:
+    with open(filename, encoding="utf-8") as f:
         return json.load(f)
 
 

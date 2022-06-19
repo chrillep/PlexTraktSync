@@ -41,6 +41,91 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 [issues]: https://github.com/Taxel/PlexTraktSync/issues
 [opening a new issue]: https://github.com/Taxel/PlexTraktSync/issues/new
 
+## Checking out code
+
+If you checkout a specific version, this can be done in one of two ways:
+- [GitHub download](#github-download)
+- [Git clone](#git-clone)
+
+Note: Development should be done against the `main` branch and not a specific tag.
+
+## Git: setup pre-commit
+
+For convence this project uses [pre-commit] hooks:
+
+```
+brew install pre-commit
+pre-commit install
+```
+
+It's usually a good idea to run the hooks against all of the files when adding
+new hooks (usually pre-commit will only run on the changed files during git
+hooks):
+
+```
+pre-commit run --all-files
+```
+
+You can update your hooks to the latest version automatically by running
+`pre-commit autoupdate`. By default, this will bring the hooks to the latest
+tag on the default branch.
+
+[pre-commit]: https://pre-commit.com/
+
+### GitHub download
+
+- Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
+- Download the `.tar` or `.zip`
+- Extract to `PlexTraktSync` directory
+
+Proceed to [Install dependencies](#install-dependencies)
+
+### Git clone
+
+- Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
+- Checkout the release with Git:
+  ```
+  git clone -b 0.15.0 --depth=1 https://github.com/Taxel/PlexTraktSync
+  ```
+
+To switch to a different version, find the latest tag and checkout:
+
+```
+git fetch --tags
+git checkout <tag>
+```
+
+Proceed to [Install dependencies](#install-dependencies)
+
+### Install dependencies
+
+This applies to [GitHub download](#github-download) and [Git clone](#git-clone).
+
+In the `PlexTraktSync` directory, install the required Python packages:
+```
+python3 -m pip install -r requirements.txt
+```
+
+To run from `PlexTraktSync` directory:
+```
+python3 -m plextraktsync
+```
+
+Or use a wrapper which is able to change directory accordingly:
+```
+/path/to/PlexTraktSync/plextraktsync.sh
+```
+
+*or* alternatively you can use [pipenv]:
+
+```
+python3 -m pip install pipenv
+pipenv install
+pipenv run plextraktsync
+```
+
+[pipenv]: https://pipenv.pypa.io/
+
 ## Testing
 
 We use [pytest] for testing.
@@ -95,7 +180,10 @@ The XML can be viewed from Plex Media Servers that you own:
 
 ![][xml-menu]
 
+You can read more from [Investigate Media Information and Formats] Plex support documentation.
+
 [xml-menu]: https://user-images.githubusercontent.com/19761269/114267878-f0d1ae00-9a1b-11eb-8f3b-90110316ed11.png
+[Investigate Media Information and Formats]: https://support.plex.tv/articles/201998867-investigate-media-information-and-formats/
 
 ## License
 

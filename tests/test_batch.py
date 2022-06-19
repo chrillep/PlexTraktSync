@@ -1,7 +1,7 @@
 #!/usr/bin/env python3 -m pytest
 from unittest.mock import Mock
 
-from plex_trakt_sync.trakt_api import TraktBatch
+from plextraktsync.trakt_api import TraktBatch
 from tests.conftest import factory, load_mock
 
 trakt = factory.trakt_api()
@@ -27,7 +27,7 @@ def test_batch_size_none():
 
 def test_batch_size_1():
     response = load_mock("trakt_sync_collection_response.json")
-    b = TraktBatch(trakt, batch_size=1)
+    b = TraktBatch(trakt, batch_delay=1)
     b.trakt_sync_collection = Mock(return_value=response)
 
     assert b.queue_size() == 0
