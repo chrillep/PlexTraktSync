@@ -6,6 +6,7 @@ session = factory.session()
 
 
 def http_cache(method, expire_after=None):
+
     @wraps(method)
     def inner(self, *args, **kwargs):
         with session.request_expire_after(expire_after):

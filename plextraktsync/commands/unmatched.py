@@ -16,7 +16,8 @@ def unmatched(no_progress_bar: bool, local: bool):
     walker = Walker(plex, trakt, mf, wc, progressbar=pb)
 
     if not wc.is_valid():
-        click.echo("Nothing to scan, this is likely due conflicting options given.")
+        click.echo(
+            "Nothing to scan, this is likely due conflicting options given.")
         return
 
     failed = []

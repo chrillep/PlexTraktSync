@@ -34,4 +34,4 @@ def load_mock(name: str):
 def make(cls=None, **kwargs) -> Union[TVShow]:
     cls = cls if cls is not None else "object"
     # https://stackoverflow.com/a/2827726/2314626
-    return type(cls, (object,), kwargs)
+    return type(cls, (object, ), kwargs)

@@ -17,11 +17,13 @@ EVENTS = {
 
 
 class Event(dict):
+
     def __str__(self):
         return f"{self.__class__}:{str(self.copy())}"
 
 
 class Error(Event):
+
     @property
     def msg(self):
         return self["msg"]
@@ -32,6 +34,7 @@ class AccountUpdateNotification(Event):
 
 
 class ActivityNotification(Event):
+
     @property
     def type(self):
         return self["Activity"]["type"]
@@ -54,6 +57,7 @@ class BackgroundProcessingQueueEventNotification(Event):
 
 
 class PlaySessionStateNotification(Event):
+
     @property
     def key(self):
         return self["key"]
@@ -88,6 +92,7 @@ class StatusNotification(Event):
 
 
 class TimelineEntry(Event):
+
     @property
     def state(self):
         return self["state"]
@@ -110,6 +115,7 @@ class TranscodeSession(Event):
 
 
 class EventFactory:
+
     def __init__(self):
         self.module = importlib.import_module(self.__module__)
 

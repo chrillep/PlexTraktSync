@@ -10,9 +10,9 @@ def print_watched_shows():
 
     trakt = factory.trakt_api()
 
-    table = Table(
-        show_header=True, header_style="bold magenta", title="Watched shows on Trakt"
-    )
+    table = Table(show_header=True,
+                  header_style="bold magenta",
+                  title="Watched shows on Trakt")
     table.add_column("Id", style="dim", width=6)
     table.add_column("Slug")
     table.add_column("Seasons", justify="right")
@@ -54,11 +54,15 @@ def inspect_media(id):
 
         print("Subtitles:")
         for index, subtitle in enumerate(pm.subtitle_streams, start=1):
-            print(f"  Subtitle {index}: ({subtitle.language}) {subtitle.title} (codec: {subtitle.codec}, selected: {subtitle.selected}, transient: {subtitle.transient})")
+            print(
+                f"  Subtitle {index}: ({subtitle.language}) {subtitle.title} (codec: {subtitle.codec}, selected: {subtitle.selected}, transient: {subtitle.transient})"
+            )
 
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
-            print(f"  Part {index}: [link=file://{quote_plus(part.file)}]{part.file}[/link]")
+            print(
+                f"  Part {index}: [link=file://{quote_plus(part.file)}]{part.file}[/link]"
+            )
 
     print("Guids:")
     for guid in pm.guids:
@@ -97,5 +101,6 @@ def inspect(input, watched_shows: bool):
         return
 
     from plextraktsync.util.expand_id import expand_id
+
     for id in expand_id(input):
         inspect_media(id)

@@ -17,9 +17,11 @@ class Media:
 
     show: Optional["Media"]
 
-    def __init__(
-        self, plex, trakt, plex_api: PlexApi = None, trakt_api: TraktApi = None
-    ):
+    def __init__(self,
+                 plex,
+                 trakt,
+                 plex_api: PlexApi = None,
+                 trakt_api: TraktApi = None):
         self.plex_api = plex_api
         self.trakt_api = trakt_api
         self.plex = plex
@@ -53,7 +55,8 @@ class Media:
     @property
     def show_trakt_id(self):
         if not self.show:
-            raise RuntimeError("Unexpected call: episode without show property")
+            raise RuntimeError(
+                "Unexpected call: episode without show property")
         return self.show.trakt_id
 
     @cached_property
@@ -70,8 +73,7 @@ class Media:
             return self.trakt_id in self.trakt_api.movie_collection_set
         elif not self.is_episode:
             raise RuntimeError(
-                f"is_collected: Unsupported media type: {self.media_type}"
-            )
+                f"is_collected: Unsupported media type: {self.media_type}")
 
         collected = self.show.collected
         return collected.get_completed(self.season_number, self.episode_number)
@@ -80,8 +82,7 @@ class Media:
     def collected(self):
         if self.media_type != "shows":
             raise RuntimeError(
-                f"show_collected: Unsupported media type: {self.media_type}"
-            )
+                f"show_collected: Unsupported media type: {self.media_type}")
 
         return self.trakt_api.collected(self.trakt)
 
@@ -94,7 +95,8 @@ class Media:
     @cached_property
     def seasons(self):
         if self.media_type != "shows":
-            raise RuntimeError(f"seasons: Unsupported media type: {self.media_type}")
+            raise RuntimeError(
+                f"seasons: Unsupported media type: {self.media_type}")
 
         return self.trakt_api.lookup(self.trakt)
 
@@ -108,21 +110,18 @@ class Media:
             return self.trakt_id in self.trakt_api.watched_movies
         elif not self.is_episode:
             raise RuntimeError(
-                f"watched_on_trakt: Unsupported media type: {self.media_type}"
-            )
+                f"watched_on_trakt: Unsupported media type: {self.media_type}")
 
         watched = self.trakt_api.watched_shows
-        return watched.get_completed(
-            self.show_trakt_id, self.season_number, self.episode_number
-        )
+        return watched.get_completed(self.show_trakt_id, self.season_number,
+                                     self.episode_number)
 
     def mark_watched_trakt(self):
         if self.is_movie:
             self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
         elif self.is_episode:
-            self.trakt_api.mark_watched(
-                self.trakt, self.plex.seen_date, self.show_trakt_id
-            )
+            self.trakt_api.mark_watched(self.trakt, self.plex.seen_date,
+                                        self.show_trakt_id)
         else:
             raise RuntimeError(
                 f"mark_watched_trakt: Unsupported media type: {self.media_type}"
@@ -133,7 +132,8 @@ class Media:
 
     @property
     def trakt_rating(self):
-        rating = self.trakt_api.ratings[self.media_type].get(self.trakt_id, None)
+        rating = self.trakt_api.ratings[self.media_type].get(
+            self.trakt_id, None)
         if rating:
             return int(rating)
         return None
@@ -180,7 +180,9 @@ class MediaFactory:
 
     def resolve_guid(self, guid: PlexGuid, show: Media = None):
         if guid.provider in ["local", "none", "agents.none"]:
-            logger.warning(f"{guid.pm.item}: Skipping {guid} because provider {guid.provider} has no external Id")
+            logger.warning(
+                f"{guid.pm.item}: Skipping {guid} because provider {guid.provider} has no external Id"
+            )
 
             return None
 
@@ -196,11 +198,13 @@ class MediaFactory:
             else:
                 tm = self.trakt.find_by_guid(guid)
         except (TraktException, RequestException) as e:
-            logger.warning(f"{guid.pm.item}: Skipping guid {guid} Trakt errors: {e}")
+            logger.warning(
+                f"{guid.pm.item}: Skipping guid {guid} Trakt errors: {e}")
             return None
 
         if tm is None:
-            logger.warning(f"{guid.pm.item}: Skipping guid {guid} not found on Trakt")
+            logger.warning(
+                f"{guid.pm.item}: Skipping guid {guid} not found on Trakt")
             return None
 
         return Media(guid.pm, tm, plex_api=self.plex, trakt_api=self.trakt)

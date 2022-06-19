@@ -4,14 +4,18 @@ from os.path import exists
 
 from dotenv import load_dotenv
 
-from plextraktsync.path import (cache_dir, config_file, config_yml,
-                                default_config_file, env_file)
+from plextraktsync.path import (
+    cache_dir,
+    config_file,
+    config_yml,
+    default_config_file,
+    env_file,
+)
 
 """
 Platform name to identify our application
 """
 PLEX_PLATFORM = "PlexTraktSync"
-
 """
 Constant in seconds for how much to wait between Trakt POST API calls.
 """
@@ -36,21 +40,22 @@ class RunConfig:
 
 
 class ConfigLoader:
+
     @staticmethod
     def load(path: str):
-        if path.endswith('.yml'):
+        if path.endswith(".yml"):
             return ConfigLoader.load_yaml(path)
-        if path.endswith('.json'):
+        if path.endswith(".json"):
             return ConfigLoader.load_json(path)
-        raise RuntimeError(f'Unknown file type: {path}')
+        raise RuntimeError(f"Unknown file type: {path}")
 
     @staticmethod
     def write(path: str, config):
-        if path.endswith('.yml'):
+        if path.endswith(".yml"):
             return ConfigLoader.write_yaml(path, config)
-        if path.endswith('.json'):
+        if path.endswith(".json"):
             return ConfigLoader.write_json(path, config)
-        raise RuntimeError(f'Unknown file type: {path}')
+        raise RuntimeError(f"Unknown file type: {path}")
 
     @staticmethod
     def copy(src: str, dst: str):
@@ -149,6 +154,7 @@ class Config(dict):
             # Rename, so users would not mistakenly edit outdated file
             config_bak = f"{self.config_file}.old"
             from plextraktsync.logging import logger
+
             logger.warning(f"Renaming {self.config_file} to {config_bak}")
             loader.rename(self.config_file, config_bak)
         else:
@@ -171,8 +177,7 @@ class Config(dict):
             self["PLEX_FALLBACKURL"] = None
 
         self["cache"]["path"] = self["cache"]["path"].replace(
-            "$PTS_CACHE_DIR", cache_dir
-        )
+            "$PTS_CACHE_DIR", cache_dir)
 
     # https://stackoverflow.com/a/20666342/2314626
     def merge(self, source, destination):

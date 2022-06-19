@@ -23,7 +23,11 @@ from plextraktsync.logging import logger
 
 
 class PlexGuid:
-    def __init__(self, guid: str, type: str, pm: Optional[PlexLibraryItem] = None):
+
+    def __init__(self,
+                 guid: str,
+                 type: str,
+                 pm: Optional[PlexLibraryItem] = None):
         self.guid = guid
         self.type = type
         self.pm = pm
@@ -92,6 +96,7 @@ class PlexGuid:
 
 
 class PlexRatingCollection(dict):
+
     def __init__(self, plex: PlexApi):
         super(dict, self).__init__()
         self.plex = plex
@@ -111,6 +116,7 @@ class PlexRatingCollection(dict):
 
 
 class PlexAudioCodec:
+
     def match(self, codec):
         for key, regex in self.audio_codecs.items():
             if key == codec:
@@ -145,14 +151,17 @@ class PlexAudioCodec:
             try:
                 codecs[k] = re.compile(v, re.IGNORECASE)
             except Exception:
-                raise RuntimeError(
-                    "Unable to compile regex pattern: %r", v, exc_info=True
-                )
+                raise RuntimeError("Unable to compile regex pattern: %r",
+                                   v,
+                                   exc_info=True)
         return codecs
 
 
 class PlexLibraryItem:
-    def __init__(self, item: Union[Movie, Show, Episode], plex: PlexApi = None):
+
+    def __init__(self,
+                 item: Union[Movie, Show, Episode],
+                 plex: PlexApi = None):
         self.item = item
         self.plex = plex
 
@@ -174,7 +183,9 @@ class PlexLibraryItem:
         if self.is_legacy_agent:
             return [PlexGuid(self.item.guid, self.type, self)]
 
-        guids = [PlexGuid(guid.id, self.type, self) for guid in self.get_guids()]
+        guids = [
+            PlexGuid(guid.id, self.type, self) for guid in self.get_guids()
+        ]
 
         # take guid in this order:
         # - tmdb, tvdb, then imdb
@@ -202,9 +213,8 @@ class PlexLibraryItem:
     def rating(self):
         if self.plex is not None:
             ratings = self.plex.ratings[self.item.librarySectionID]
-            user_rating = (
-                ratings[self.item.ratingKey] if self.item.ratingKey in ratings else None
-            )
+            user_rating = (ratings[self.item.ratingKey]
+                           if self.item.ratingKey in ratings else None)
         else:
             user_rating = self.item.userRating
 
@@ -399,6 +409,7 @@ class PlexLibraryItem:
 
 
 class PlexLibrarySection:
+
     def __init__(self, section: LibrarySection, plex: PlexApi = None):
         self.section = section
         self.plex = plex
@@ -426,14 +437,18 @@ class PlexLibrarySection:
     def find_with_rating(self):
         filters = {
             "and": [
-                {"userRating>>": -1},
+                {
+                    "userRating>>": -1
+                },
             ]
         }
 
         return self.section.search(filters=filters)
 
     @nocache
-    def find_by_id(self, id: Union[str, int]) -> Optional[Union[Movie, Show, Episode]]:
+    def find_by_id(
+            self, id: Union[str,
+                            int]) -> Optional[Union[Movie, Show, Episode]]:
         try:
             return self.section.fetchItem(int(id))
         except NotFound:
@@ -459,7 +474,9 @@ class PlexLibrarySection:
     @nocache
     @rate_limit()
     def fetch_items(self, key: str, size: int, start: int):
-        return self.section.fetchItems(key, container_start=start, container_size=size)
+        return self.section.fetchItems(key,
+                                       container_start=start,
+                                       container_size=size)
 
     def items(self, max_items: int):
         for item in self.all(max_items):
@@ -580,7 +597,8 @@ class PlexApi:
         try:
             self.plex.playlist(name).delete()
         except (NotFound, BadRequest):
-            logger.debug(f"Playlist '{name}' not found, so it could not be deleted")
+            logger.debug(
+                f"Playlist '{name}' not found, so it could not be deleted")
 
     @nocache
     @flatten_list

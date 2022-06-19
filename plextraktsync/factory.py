@@ -5,6 +5,7 @@ from plextraktsync.rich_addons import RichHighlighter
 
 
 class Factory:
+
     @memoize
     def trakt_api(self):
         from plextraktsync.trakt_api import TraktApi
@@ -82,7 +83,7 @@ class Factory:
 
             warnings.filterwarnings("ignore", category=TqdmExperimentalWarning)
 
-            return partial(tqdm, options={'console': console})
+            return partial(tqdm, options={"console": console})
 
         return None
 
@@ -118,7 +119,11 @@ class Factory:
         trakt = self.trakt_api()
         mf = self.media_factory()
         pb = self.progressbar(config.progressbar)
-        w = Walker(plex=plex, trakt=trakt, mf=mf, config=walk_config, progressbar=pb)
+        w = Walker(plex=plex,
+                   trakt=trakt,
+                   mf=mf,
+                   config=walk_config,
+                   progressbar=pb)
 
         return w
 
@@ -128,7 +133,12 @@ class Factory:
 
         from plextraktsync.console import console
 
-        handler = RichHandler(console=console, show_time=False, show_path=False, highlighter=RichHighlighter())
+        handler = RichHandler(
+            console=console,
+            show_time=False,
+            show_path=False,
+            highlighter=RichHighlighter(),
+        )
 
         return handler
 

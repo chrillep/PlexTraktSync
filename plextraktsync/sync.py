@@ -8,6 +8,7 @@ from plextraktsync.walker import Walker
 
 
 class SyncConfig:
+
     def __init__(self, config: Config):
         self.config = dict(config["sync"])
 
@@ -40,15 +41,15 @@ class SyncConfig:
 
     @cached_property
     def sync_watched_status(self):
-        return (
-            self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
-        )
+        return (self.trakt_to_plex["watched_status"]
+                or self.plex_to_trakt["watched_status"])
 
     def get(self, section, key):
         return self[key] if key in self else self[section][key]
 
 
 class Sync:
+
     def __init__(self, config: Config):
         self.config = SyncConfig(config)
 
@@ -57,7 +58,9 @@ class Sync:
         trakt = walker.trakt
 
         if self.config.trakt_to_plex["watchlist"] and trakt.watchlist_movies:
-            listutil.addList(None, "Trakt Watchlist", trakt_list=trakt.watchlist_movies)
+            listutil.addList(None,
+                             "Trakt Watchlist",
+                             trakt_list=trakt.watchlist_movies)
 
         if self.config.trakt_to_plex["liked_lists"]:
             for lst in trakt.liked_lists:

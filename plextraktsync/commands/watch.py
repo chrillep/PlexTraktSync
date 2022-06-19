@@ -5,8 +5,12 @@ from trakt.tv import TVEpisode
 
 from plextraktsync.config import Config
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.events import (ActivityNotification, Error,
-                                  PlaySessionStateNotification, TimelineEntry)
+from plextraktsync.events import (
+    ActivityNotification,
+    Error,
+    PlaySessionStateNotification,
+    TimelineEntry,
+)
 from plextraktsync.factory import factory
 from plextraktsync.listener import WebSocketListener
 from plextraktsync.logging import logging
@@ -16,6 +20,7 @@ from plextraktsync.trakt_api import TraktApi
 
 
 class ScrobblerCollection(dict):
+
     def __init__(self, trakt: TraktApi, threshold=80):
         super(dict, self).__init__()
         self.trakt = trakt
@@ -27,6 +32,7 @@ class ScrobblerCollection(dict):
 
 
 class SessionCollection(dict):
+
     def __init__(self, plex: PlexApi):
         super(dict, self).__init__()
         self.plex = plex
@@ -47,9 +53,9 @@ class SessionCollection(dict):
 
 
 class WatchStateUpdater:
-    def __init__(
-        self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, config: Config
-    ):
+
+    def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory,
+                 config: Config):
         self.plex = plex
         self.trakt = trakt
         self.mf = mf
@@ -112,11 +118,13 @@ class WatchStateUpdater:
             m.mark_watched_trakt()
 
         if self.add_collection and not m.is_collected:
-            self.logger.info(f"on_activity: Add {activity.key} to collection: {m}")
+            self.logger.info(
+                f"on_activity: Add {activity.key} to collection: {m}")
             m.add_to_collection()
 
     def on_delete(self, event: TimelineEntry):
-        self.logger.info(f"on_delete: Deleted on Plex: {event.item_id}: {event.title}")
+        self.logger.info(
+            f"on_delete: Deleted on Plex: {event.item_id}: {event.title}")
 
         m = self.find_by_key(event.item_id)
         if not m:
@@ -125,7 +133,8 @@ class WatchStateUpdater:
 
         if self.remove_collection:
             m.remove_from_collection()
-            self.logger.info(f"on_delete: Removed {event.item_id} from Collection: {m}")
+            self.logger.info(
+                f"on_delete: Removed {event.item_id} from Collection: {m}")
 
     def on_play(self, event: PlaySessionStateNotification):
         if not self.can_scrobble(event):
@@ -151,7 +160,8 @@ class WatchStateUpdater:
 
         return self.sessions[event.session_key] == self.username_filter
 
-    def scrobble(self, m: Media, percent: float, event: PlaySessionStateNotification):
+    def scrobble(self, m: Media, percent: float,
+                 event: PlaySessionStateNotification):
         tm = m.trakt
         state = event.state
 

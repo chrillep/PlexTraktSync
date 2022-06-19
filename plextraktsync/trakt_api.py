@@ -71,6 +71,7 @@ class ScrobblerProxy:
 
 
 class TraktRatingCollection(dict):
+
     def __init__(self, trakt: TraktApi):
         super(dict, self).__init__()
         self.trakt = trakt
@@ -102,7 +103,9 @@ class TraktApi:
     def device_auth(client_id: str, client_secret: str):
         trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
 
-        return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
+        return trakt.init(client_id=client_id,
+                          client_secret=client_secret,
+                          store=True)
 
     @cached_property
     def batch(self):
@@ -145,7 +148,8 @@ class TraktApi:
     @nocache
     @rate_limit()
     @time_limit()
-    def remove_from_library(self, media: Union[Movie, TVShow, TVSeason, TVEpisode]):
+    def remove_from_library(self, media: Union[Movie, TVShow, TVSeason,
+                                               TVEpisode]):
         if not isinstance(media, (Movie, TVShow, TVSeason, TVEpisode)):
             raise ValueError("Must be valid media type")
         media.remove_from_library()
@@ -183,7 +187,8 @@ class TraktApi:
         m.rate(rating)
 
     @staticmethod
-    def scrobbler(media: Union[Movie, TVEpisode], threshold=80) -> ScrobblerProxy:
+    def scrobbler(media: Union[Movie, TVEpisode],
+                  threshold=80) -> ScrobblerProxy:
         scrobbler = media.scrobble(0, None, None)
         return ScrobblerProxy(scrobbler, threshold)
 
@@ -197,7 +202,8 @@ class TraktApi:
         elif m.media_type == "episodes" and show_trakt_id:
             self.watched_shows.add(show_trakt_id, m.season, m.number)
         else:
-            raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type}")
+            raise RuntimeError(
+                f"mark_watched: Unsupported media type: {m.media_type}")
 
     def add_to_collection(self, m, pm: PlexLibraryItem, batch=False):
         if m.media_type == "movies":
@@ -232,14 +238,16 @@ class TraktApi:
 
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
-            ts = self.search_by_id(
-                guid.show_id, id_type=guid.provider, media_type="show"
-            )
+            ts = self.search_by_id(guid.show_id,
+                                   id_type=guid.provider,
+                                   media_type="show")
             lookup = self.lookup(ts)
 
             return self.find_episode_guid(guid, lookup)
 
-        return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
+        return self.search_by_id(guid.id,
+                                 id_type=guid.provider,
+                                 media_type=guid.type)
 
     @rate_limit()
     def search_by_id(self, media_id: str, id_type: str, media_type: str):
@@ -255,9 +263,9 @@ class TraktApi:
 
             return None
 
-        search = trakt.sync.search_by_id(
-            media_id, id_type=id_type, media_type=media_type
-        )
+        search = trakt.sync.search_by_id(media_id,
+                                         id_type=id_type,
+                                         media_type=media_type)
         # look for the first wanted type in the results
         # NOTE: this is not needed, kept around for caution
         for m in search:
@@ -292,7 +300,8 @@ class TraktApi:
         Find Trakt Episode from Guid of Plex Episode
         """
         try:
-            return lookup[guid.pm.season_number][guid.pm.episode_number].instance
+            return lookup[guid.pm.season_number][
+                guid.pm.episode_number].instance
         except KeyError:
             # Retry using search for specific Plex Episode
             logger.warning("Retry using search for specific Plex Episode")
@@ -308,6 +317,7 @@ class TraktApi:
 
 
 class TraktBatch:
+
     def __init__(self, trakt: TraktApi, batch_delay=None):
         self.trakt = trakt
         self.batch_delay = batch_delay

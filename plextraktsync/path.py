@@ -6,6 +6,7 @@ from plextraktsync.decorators.cached_property import cached_property
 
 
 class Path:
+
     def __init__(self):
         self.app_name = "PlexTraktSync"
         self.module_path = dirname(abspath(__file__))

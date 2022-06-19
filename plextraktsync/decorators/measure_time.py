@@ -13,5 +13,6 @@ def measure_time(message, level=logging.INFO):
     m, s = divmod(timedelta, 60)
     logger.log(
         level,
-        f"{message} in " + (m > 0) * f"{m:.0f} min " + (s > 0) * f"{s:.1f} seconds",
+        f"{message} in " + (m > 0) * f"{m:.0f} min " +
+        (s > 0) * f"{s:.1f} seconds",
     )

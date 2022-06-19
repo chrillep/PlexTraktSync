@@ -30,9 +30,9 @@ def sync(
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
 
-    config = factory.run_config().update(
-        batch_delay=batch_delay, dry_run=dry_run, progressbar=not no_progress_bar
-    )
+    config = factory.run_config().update(batch_delay=batch_delay,
+                                         dry_run=dry_run,
+                                         progressbar=not no_progress_bar)
     wc = factory.walk_config().update(movies=movies, shows=shows)
     w = factory.walker()
 
@@ -47,7 +47,8 @@ def sync(
         wc.add_movie(movie)
 
     if not wc.is_valid():
-        click.echo("Nothing to sync, this is likely due conflicting options given.")
+        click.echo(
+            "Nothing to sync, this is likely due conflicting options given.")
         return
 
     w.print_plan(print=tqdm.write)
