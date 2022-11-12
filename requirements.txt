@@ -16,7 +16,7 @@ commonmark==0.9.1
 deprecated==1.2.13
 idna==3.3; python_version >= '3'
 inquirerpy==0.3.3
-oauthlib==3.2.0; python_version >= '3.6'
+oauthlib==3.2.1; python_version >= '3.6'
 pfzy==0.3.4; python_version >= '3.7' and python_version < '4.0'
 plexapi==4.11.2
 prompt-toolkit==3.0.29; python_full_version >= '3.6.2'
